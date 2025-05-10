@@ -1,13 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Image,
-  Pressable,
-  Dimensions,
-  PixelRatio,
-} from 'react-native';
+import {View, Text, TextInput, Image, Pressable} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
@@ -19,12 +10,10 @@ import {RootStackParamList} from '../../types/types';
 import {useAuth} from '../../context/AuthContext';
 import LogoutIcon from '../../assets/Logout.svg';
 import Moon from '../../assets/moon.svg';
-// import SaleImage from './saleImage.png';
 import ProductList from '../../components/organisms/ProductList';
 import {useTheme} from '../../context/ThemeContext';
-
-const {width, height} = Dimensions.get('window');
-const pixel = PixelRatio.getFontScale();
+import {lightStyles} from '../../styles/Home.light';
+import {darkStyles} from '../../styles/Home.dark';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 const HomeScreen = () => {
@@ -102,139 +91,3 @@ const HomeScreen = () => {
 };
 
 export default HomeScreen;
-
-const lightStyles = StyleSheet.create({
-  container: {
-    width: width,
-    height: height,
-  },
-  header: {
-    width: width,
-    height: height * 0.1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: 15,
-    paddingRight: 15,
-  },
-  shoply: {
-    fontSize: pixel * 30,
-    fontFamily: 'Roboto',
-    color: '#3A59D1',
-  },
-  icon: {
-    width: '30%',
-    height: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-  searchContainer: {
-    width: width,
-    height: height * 0.08,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  input: {
-    width: '80%',
-    padding: 10,
-    marginTop: 15,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 50,
-    color: 'black',
-  },
-  imageContainer: {
-    width: width,
-    height: height * 0.25,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image: {
-    width: '80%',
-    height: '75%',
-    borderRadius: 25,
-  },
-  bestSeller: {
-    width: width,
-    height: height * 0.05,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: 15,
-    paddingRight: 15,
-  },
-  seeAll: {
-    fontSize: pixel * 15,
-    fontFamily: 'Roboto',
-    color: '#3A59D1',
-  },
-});
-
-const darkStyles = StyleSheet.create({
-  container: {
-    width: width,
-    height: height,
-    backgroundColor: '#12141C',
-  },
-  header: {
-    width: width,
-    height: height * 0.1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingLeft: 15,
-    paddingRight: 15,
-  },
-  shoply: {
-    fontSize: pixel * 30,
-    fontFamily: 'Roboto',
-    color: '#3A59D1',
-  },
-  icon: {
-    width: '30%',
-    height: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-  searchContainer: {
-    width: width,
-    height: height * 0.08,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  input: {
-    width: '80%',
-    padding: 10,
-    marginTop: 15,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 50,
-    color: 'black',
-  },
-  imageContainer: {
-    width: width,
-    height: height * 0.25,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image: {
-    width: '80%',
-    height: '75%',
-    borderRadius: 25,
-  },
-  bestSeller: {
-    width: width,
-    height: height * 0.05,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: 15,
-    paddingRight: 15,
-  },
-  seeAll: {
-    fontSize: pixel * 15,
-    fontFamily: 'Roboto',
-    color: '#3A59D1',
-  },
-});

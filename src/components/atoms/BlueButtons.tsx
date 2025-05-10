@@ -16,6 +16,8 @@ const BlueButtons = ({name, onPress}: BlueButtonProps) => {
 
 export default BlueButtons;
 
+// custom blue buttons in login and singUp pages
+
 const styles = StyleSheet.create({
   button: {
     width: '60%',

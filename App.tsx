@@ -2,7 +2,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {StatusBar} from 'react-native';
+import {StatusBar, StyleSheet} from 'react-native';
 
 import {AuthProvider} from './src/context/AuthContext';
 import {ThemeProvider, useTheme} from './src/context/ThemeContext';
@@ -27,7 +27,7 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
+    <GestureHandlerRootView style={styles.container}>
       <SafeAreaProvider>
         <AuthProvider>
           <ThemeProvider>
@@ -40,3 +40,9 @@ const App = () => {
 };
 
 export default App;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

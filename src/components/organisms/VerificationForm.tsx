@@ -15,7 +15,7 @@ import {RootStackParamList} from '../../types/types';
 import {useNavigation} from '@react-navigation/native';
 import BlueButtons from '../atoms/BlueButtons';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const pixel = PixelRatio.getFontScale();
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
@@ -29,6 +29,7 @@ const codeSchema = z.object({
 
 const VerificationForm = () => {
   const navigation = useNavigation<NavigationProp>();
+
   const inputRefs = [
     useRef<TextInput>(null),
     useRef<TextInput>(null),
@@ -53,6 +54,7 @@ const VerificationForm = () => {
   });
 
   return (
+    //make 4 input only take 1 number
     <View style={styles.container}>
       <View style={styles.codeInputContainer}>
         {[1, 2, 3, 4].map((num, index) => (
@@ -92,7 +94,6 @@ const VerificationForm = () => {
 
       <View style={styles.btnWrapper}>
         <BlueButtons name="Verify" onPress={handleSubmit(onSubmit)} />
-        <BlueButtons name="Back" onPress={navigation.goBack} />
       </View>
     </View>
   );
@@ -103,7 +104,7 @@ export default VerificationForm;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height * 0.6,
+    height: '17%',
   },
   codeInputContainer: {
     width: '100%',

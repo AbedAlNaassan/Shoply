@@ -1,19 +1,19 @@
-import {View, Text, Animated, Easing, Pressable} from 'react-native';
 import React, {useEffect, useRef} from 'react';
+import {View, Text, Animated, Easing, Pressable} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
-import {RootStackParamList} from '../../types/types';
 import {StackNavigationProp} from '@react-navigation/stack';
-// import phoneImage from './PhoneImage.png';
+
+import {RootStackParamList} from '../../types/types';
 import {useTheme} from '../../context/ThemeContext';
 import {LightStyles} from '../../styles/Welcome.light';
 import {DarkStyles} from '../../styles/Welcome.dark';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 const WelcomeScreen = () => {
+  const {theme} = useTheme();
   const slideAnim = useRef(new Animated.Value(300)).current; // Start from right (off-screen)
   const navigation = useNavigation<NavigationProp>();
-  const {theme} = useTheme();
 
   const styles = theme === 'dark' ? DarkStyles : LightStyles;
 
@@ -67,5 +67,3 @@ const WelcomeScreen = () => {
 };
 
 export default WelcomeScreen;
-
-// as ReactNativePublicAPI;

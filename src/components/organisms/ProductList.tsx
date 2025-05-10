@@ -35,6 +35,7 @@ const ProductList: React.FC<Props> = ({data, limit}) => {
     navigation.navigate('ProductDetails', {id: productId});
   };
 
+  //display info from Json file
   const renderItem = ({item}: {item: Product}) => (
     <Pressable
       key={item._id}
