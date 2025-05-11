@@ -37,7 +37,7 @@ const ProductListScreen = () => {
         <Text style={styles.title}>Phones List</Text>
       </View>
 
-      <ProductList data={ProductData.data} />
+      <ProductList data={ProductData.data} scrollEnabled={true} />
     </SafeAreaView>
   );
 };
@@ -46,7 +46,7 @@ export default ProductListScreen;
 
 const lightStyles = StyleSheet.create({
   container: {
-    height: height,
+    flex: 1,
     backgroundColor: '#fff',
   },
   titleContainer: {
@@ -66,12 +66,12 @@ const lightStyles = StyleSheet.create({
 
 const darkStyles = StyleSheet.create({
   container: {
-    height: height,
+    flex: 1,
     backgroundColor: '#12141C',
   },
   titleContainer: {
     width: width,
-    height: height * 0.1, // Adjusted height for title section
+    height: height * 0.1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 70,

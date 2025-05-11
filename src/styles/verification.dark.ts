@@ -1,27 +1,22 @@
 import {Dimensions, PixelRatio, StyleSheet} from 'react-native';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const pixel = PixelRatio.getFontScale();
 
 export const darkStyles = StyleSheet.create({
-  container: {
-    width: width,
-    height: height,
+  textandCodeContainer: {
+    width: '100%',
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#12141C',
   },
-  textandCodeContainer: {
-    width: width,
-    height: height,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   textContainer: {
     width: '100%',
-    height: '40%',
+    height: '20%',
     justifyContent: 'flex-end',
     alignItems: 'center',
+    marginTop: '10%',
   },
   shoply: {
     fontSize: pixel * 40,
@@ -40,7 +35,7 @@ export const darkStyles = StyleSheet.create({
     color: 'gray',
   },
   cancel: {
-    width: width,
+    width: width * 0.9,
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',

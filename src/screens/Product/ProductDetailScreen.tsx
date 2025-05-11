@@ -56,7 +56,10 @@ const ProductDetailScreen = () => {
   return (
     <SafeAreaView style={styles.safearea}>
       <ScrollView
-        contentContainerStyle={[styles.container, {padding: width * 0.05}]}>
+        contentContainerStyle={[
+          styles.container,
+          {flexGrow: 1, padding: width * 0.05},
+        ]}>
         <Pressable onPress={() => navigation.goBack()} style={styles.back}>
           <BackIcon width={30} height={30} />
         </Pressable>

@@ -15,7 +15,7 @@ import {RootStackParamList} from '../../types/types';
 import {useNavigation} from '@react-navigation/native';
 import BlueButtons from '../atoms/BlueButtons';
 
-const {width} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 const pixel = PixelRatio.getFontScale();
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
@@ -87,9 +87,11 @@ const VerificationForm = () => {
 
       {/* One global error message */}
       {Object.keys(errors).length > 0 && (
-        <Text style={styles.errorText}>
-          Please enter all digits correctly (0–9)
-        </Text>
+        <View style={styles.errorText}>
+          <Text style={styles.text}>
+            Please enter all digits correctly (0–9)
+          </Text>
+        </View>
       )}
 
       <View style={styles.btnWrapper}>
@@ -104,21 +106,23 @@ export default VerificationForm;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: '17%',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   codeInputContainer: {
-    width: '100%',
-    height: '20%',
+    width: width,
+    height: '30%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: '20',
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: 15,
+    marginBottom: 15,
   },
   codeInput: {
-    width: 60,
-    height: 60,
+    width: width * 0.15,
+    height: height * 0.07,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 10,
@@ -127,14 +131,17 @@ const styles = StyleSheet.create({
     color: '#3A59D1',
   },
   errorText: {
-    color: 'red',
-    fontSize: pixel * 14,
-    marginBottom: 5,
-    textAlign: 'center',
+    height: '6%',
+    marginBottom: 15,
   },
   btnWrapper: {
     width: '100%',
-    height: '80%',
+    flex: 1,
     alignItems: 'center',
+  },
+  text: {
+    color: 'red',
+    fontSize: pixel * 14,
+    textAlign: 'center',
   },
 });

@@ -1,11 +1,9 @@
-import {Dimensions, PixelRatio, StyleSheet} from 'react-native';
-
-const {height} = Dimensions.get('window');
+import {PixelRatio, StyleSheet} from 'react-native';
 const pixel = PixelRatio.getFontScale();
 
 export const darkStyles = StyleSheet.create({
   safearea: {
-    height: height,
+    flex: 1,
     backgroundColor: '#12141C',
   },
   container: {

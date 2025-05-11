@@ -1,16 +1,16 @@
-import {Dimensions, PixelRatio, StyleSheet} from 'react-native';
+import {PixelRatio, StyleSheet} from 'react-native';
 
-const {width, height} = Dimensions.get('window');
 const pixel = PixelRatio.getFontScale();
 
 export const lightStyles = StyleSheet.create({
   container: {
-    width: width,
-    height: height,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   header: {
-    width: width,
-    height: height * 0.1,
+    width: '100%',
+    height: '10%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -30,8 +30,8 @@ export const lightStyles = StyleSheet.create({
     alignItems: 'center',
   },
   searchContainer: {
-    width: width,
-    height: height * 0.08,
+    width: '100%',
+    height: '9%',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -45,19 +45,18 @@ export const lightStyles = StyleSheet.create({
     color: 'black',
   },
   imageContainer: {
-    width: width,
-    height: height * 0.25,
-    justifyContent: 'center',
+    width: '100%',
+    height: '25%',
     alignItems: 'center',
   },
   image: {
-    width: '80%',
-    height: '75%',
+    width: 300,
+    height: 150,
     borderRadius: 25,
   },
   bestSeller: {
-    width: width,
-    height: height * 0.05,
+    width: '100%',
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

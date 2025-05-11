@@ -14,6 +14,7 @@ import ProductList from '../../components/organisms/ProductList';
 import {useTheme} from '../../context/ThemeContext';
 import {lightStyles} from '../../styles/Home.light';
 import {darkStyles} from '../../styles/Home.dark';
+import {ScrollView} from 'react-native-gesture-handler';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 const HomeScreen = () => {
@@ -40,52 +41,54 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.shoply}>Shoply</Text>
-        <View style={styles.icon}>
-          <Moon width={30} height={30} onPress={toggleTheme} />
-          <Pressable onPress={handleLogout}>
-            <LogoutIcon width={24} height={24} />
+      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+        <View style={styles.header}>
+          <Text style={styles.shoply}>Shoply</Text>
+          <View style={styles.icon}>
+            <Moon width={30} height={30} onPress={toggleTheme} />
+            <Pressable onPress={handleLogout}>
+              <LogoutIcon width={24} height={24} />
+            </Pressable>
+          </View>
+        </View>
+
+        <View style={styles.searchContainer}>
+          <Controller
+            control={control}
+            name="search"
+            render={({field: {onChange, onBlur, value}}) => (
+              <TextInput
+                style={styles.input}
+                placeholder="Search"
+                placeholderTextColor="gray"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                returnKeyType="search"
+                onSubmitEditing={handleSubmit(onSearchSubmit)}
+              />
+            )}
+          />
+        </View>
+
+        <View style={styles.imageContainer}>
+          <Image
+            source={require('../../assets/saleImage.png')}
+            style={styles.image}
+          />
+        </View>
+
+        <View style={styles.bestSeller}>
+          <Text style={styles.shoply}>Best Sellers</Text>
+          <Pressable
+            onPress={() =>
+              navigation.navigate('ProductList', {screen: 'ProductList'})
+            }>
+            <Text style={styles.seeAll}>See All</Text>
           </Pressable>
         </View>
-      </View>
-
-      <View style={styles.searchContainer}>
-        <Controller
-          control={control}
-          name="search"
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              style={styles.input}
-              placeholder="Search"
-              placeholderTextColor="gray"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              returnKeyType="search"
-              onSubmitEditing={handleSubmit(onSearchSubmit)}
-            />
-          )}
-        />
-      </View>
-
-      <View style={styles.imageContainer}>
-        <Image
-          source={require('../../assets/saleImage.png')}
-          style={styles.image}
-        />
-      </View>
-
-      <View style={styles.bestSeller}>
-        <Text style={styles.shoply}>Best Sellers</Text>
-        <Pressable
-          onPress={() =>
-            navigation.navigate('ProductList', {screen: 'ProductList'})
-          }>
-          <Text style={styles.seeAll}>See All</Text>
-        </Pressable>
-      </View>
-      <ProductList data={productData.data} limit={4} />
+        <ProductList data={productData.data} limit={4} scrollEnabled={false} />
+      </ScrollView>
     </SafeAreaView>
   );
 };

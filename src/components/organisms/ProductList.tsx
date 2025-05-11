@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   View,
   Text,
@@ -8,13 +9,15 @@ import {
   Dimensions,
   PixelRatio,
 } from 'react-native';
-import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../types/types';
-const {width, height} = Dimensions.get('window');
+
+const {width} = Dimensions.get('window');
 const pixel = PixelRatio.getFontScale();
+
 type NavigationProp = StackNavigationProp<RootStackParamList, 'ProductDetails'>;
+
 interface Product {
   _id: string;
   title: string;
@@ -24,10 +27,11 @@ interface Product {
 
 interface Props {
   data: Product[];
-  limit?: number; // Optional slice limit
+  limit?: number;
+  scrollEnabled?: boolean;
 }
 
-const ProductList: React.FC<Props> = ({data, limit}) => {
+const ProductList: React.FC<Props> = ({data, limit, scrollEnabled = true}) => {
   const slicedData = limit ? data.slice(0, limit) : data;
   const navigation = useNavigation<NavigationProp>();
 
@@ -35,7 +39,6 @@ const ProductList: React.FC<Props> = ({data, limit}) => {
     navigation.navigate('ProductDetails', {id: productId});
   };
 
-  //display info from Json file
   const renderItem = ({item}: {item: Product}) => (
     <Pressable
       key={item._id}
@@ -63,6 +66,7 @@ const ProductList: React.FC<Props> = ({data, limit}) => {
       keyExtractor={item => item._id}
       contentContainerStyle={styles.list}
       numColumns={2}
+      scrollEnabled={scrollEnabled} // Control scrolling based on scrollEnabled prop
     />
   );
 };
@@ -71,34 +75,37 @@ export default ProductList;
 
 const styles = StyleSheet.create({
   list: {
-    width: width,
+    width: '100%',
     justifyContent: 'center',
-    paddingLeft: width * 0.02,
+    alignItems: 'center',
+    paddingBottom: 50,
+    marginTop: 20,
   },
   infoContainer: {
-    width: width * 0.45,
-    height: height * 0.21,
-    margin: 6,
+    width: width / 2,
+    height: 200,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imageList: {
+    width: '100%',
+    height: '60%',
   },
   images: {
     width: '100%',
     height: '100%',
-    marginBottom: 16,
-  },
-  imageList: {
-    width: '100%',
-    height: '70%',
   },
   textList: {
-    width: '100%',
     height: '30%',
+    justifyContent: 'center',
     marginTop: 15,
-    marginLeft: 10,
+    alignItems: 'center',
   },
   textLists: {
+    width: '100%',
+    flex: 1,
     fontSize: pixel * 15,
     fontFamily: 'Roboto',
     color: '#3A59D1',
-    marginLeft: 20,
   },
 });

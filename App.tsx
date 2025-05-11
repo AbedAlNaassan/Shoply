@@ -10,8 +10,6 @@ import {ThemeProvider, useTheme} from './src/context/ThemeContext';
 // Import the necessary navigation functions
 import RootNavigator from './src/navigation/RootNavigator';
 
-// Create the Stack navigator
-
 const AppContent = () => {
   const {isDarkMode} = useTheme();
 
@@ -44,5 +42,8 @@ export default App;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
   },
 });

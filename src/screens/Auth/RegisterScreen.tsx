@@ -1,10 +1,17 @@
-import {View, Text, StyleSheet, Dimensions, PixelRatio} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  PixelRatio,
+  ScrollView,
+} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import RegisterForm from '../../components/organisms/RegisterForm';
 import {useTheme} from '../../context/ThemeContext';
 
-const {width, height} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 const pixel = PixelRatio.getFontScale();
 
 const RegisterScreen = () => {
@@ -14,21 +21,28 @@ const RegisterScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>SignUp</Text>
-      </View>
-      <RegisterForm />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.header}>
+          <Text style={styles.title}>SignUp</Text>
+        </View>
+        <RegisterForm />
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
 const lightStyles = StyleSheet.create({
   container: {
-    width: width,
-    height: height,
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   header: {
-    width: width,
+    width: '100%',
     height: height * 0.2,
     justifyContent: 'flex-end',
     alignItems: 'center',
@@ -42,12 +56,16 @@ const lightStyles = StyleSheet.create({
 
 const darkStyles = StyleSheet.create({
   container: {
-    height: height,
-    width: width,
+    flex: 1,
     backgroundColor: '#12141C',
   },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
   header: {
-    width: width,
+    width: '100%',
     height: height * 0.2,
     justifyContent: 'flex-end',
     alignItems: 'center',

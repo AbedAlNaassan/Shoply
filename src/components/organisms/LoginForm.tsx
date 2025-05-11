@@ -1,4 +1,4 @@
-import {View, Text, TextInput, StyleSheet, Dimensions} from 'react-native';
+import {View, Text, TextInput, StyleSheet} from 'react-native';
 import React from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import BlueButtons from '../atoms/BlueButtons';
@@ -8,8 +8,7 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../types/types';
-
-const {width, height} = Dimensions.get('window');
+import {useWindowDimensions} from 'react-native';
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email format'),
@@ -18,9 +17,13 @@ const loginSchema = z.object({
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Verification'>;
 type LoginFormData = z.infer<typeof loginSchema>;
+
 const LoginForm = () => {
   const navigation = useNavigation<NavigationProp>();
   const {login} = useAuth();
+
+  // Using useWindowDimensions for dynamic resizing
+  const {width, height} = useWindowDimensions();
 
   const {
     control,
@@ -40,10 +43,19 @@ const LoginForm = () => {
         type: 'manual',
         message: 'Username or Password is incorrect',
       });
-    } // You can handle form submission here
+    }
   };
+
+  // Define dynamic style here
+  const formContainerStyle = {
+    width: width,
+    height: height * 0.65,
+    justifyContent: 'flex-start' as 'flex-start',
+    alignItems: 'center' as 'center',
+  };
+
   return (
-    <View style={styles.formContainer}>
+    <View style={formContainerStyle}>
       {/* Email Input */}
       <Controller
         control={control}
@@ -84,6 +96,7 @@ const LoginForm = () => {
       {errors.password && (
         <Text style={styles.error}>{errors.password.message}</Text>
       )}
+
       <BlueButtons name="Login" onPress={handleSubmit(onSubmit)} />
       <BlueButtons
         name="Back"
@@ -96,16 +109,6 @@ const LoginForm = () => {
 export default LoginForm;
 
 const styles = StyleSheet.create({
-  formContainer: {
-    width: width,
-    height: height * 0.65,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  backContainerButton: {
-    width: width,
-    height: '40%',
-  },
   input: {
     width: '80%',
     padding: 15,
@@ -115,20 +118,11 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     color: '#3A59D1',
   },
-  backButton: {
-    width: '60%',
-    padding: 15,
-    marginTop: 5,
-    backgroundColor: '#3A59D1', // Green background
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   error: {
     color: 'red',
     marginTop: 5,
-    width: '80%', // Match input width
-    textAlign: 'left', // Align error to the left
+    width: '80%',
+    textAlign: 'left',
     marginLeft: 30,
   },
 });
