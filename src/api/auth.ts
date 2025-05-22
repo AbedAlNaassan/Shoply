@@ -102,8 +102,6 @@ export const refreshTokenApi = async (
 ): Promise<RefreshTokenResponse> => {
   try {
     const response = await axios.post('/api/auth/refresh-token', params);
-
-    // ✅ Ensure we return only the "data" part that has accessToken and refreshToken
     return response.data.data;
   } catch (error: any) {
     throw error.response?.data || {message: 'Token refresh failed'};

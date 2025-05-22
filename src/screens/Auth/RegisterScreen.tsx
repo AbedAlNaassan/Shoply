@@ -16,7 +16,6 @@ const pixel = PixelRatio.getFontScale();
 
 const RegisterScreen = () => {
   const {theme} = useTheme();
-
   const styles = theme === 'dark' ? darkStyles : lightStyles;
 
   return (

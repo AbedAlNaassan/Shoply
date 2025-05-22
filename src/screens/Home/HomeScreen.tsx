@@ -1,9 +1,7 @@
 import {View, Text, Image, Pressable} from 'react-native';
-import React, {useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-
 import ProductList from '../../components/organisms/ProductList';
 import {ScrollView} from 'react-native-gesture-handler';
 import {RootStackParamList} from '../../types/types';
@@ -21,11 +19,6 @@ const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
   const {theme, toggleTheme} = useTheme();
   const {logout} = useAuthStore();
-  const accessToken = useAuthStore(state => state.accessToken);
-
-  useEffect(() => {
-    console.log('Access Token from Zustand:', accessToken);
-  }, [accessToken]);
 
   const styles = theme === 'dark' ? darkStyles : lightStyles;
 
@@ -39,7 +32,6 @@ const HomeScreen = () => {
 
   const onSearch = () => {
     navigation.navigate('Search');
-    // You can add actual search logic here
   };
 
   return (

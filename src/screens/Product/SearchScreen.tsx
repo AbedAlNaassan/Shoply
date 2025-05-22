@@ -34,7 +34,6 @@ interface SearchResponse {
 
 const SearchScreen = () => {
   const accessToken = useAuthStore(state => state.accessToken);
-
   const [query, setQuery] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);

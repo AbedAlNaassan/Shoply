@@ -9,23 +9,22 @@ import {
   Share,
   Pressable,
   ActivityIndicator,
+  PermissionsAndroid,
+  Platform,
+  Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import MapView, {Marker} from 'react-native-maps';
-
-import axios from 'axios';
-
 import {darkStyles} from '../../styles/ProductDetails.dark';
 import {lightStyles} from '../../styles/ProductDetails.light';
 import {useTheme} from '../../context/ThemeContext';
 import ShareIcon from '../../assets/share.svg';
 import BackIcon from '../../assets/back.svg';
 import {useAuthStore} from '../../zustand/AuthStore';
-import {PermissionsAndroid, Platform, Alert} from 'react-native';
 import RNFS from 'react-native-fs';
 import Swiper from 'react-native-swiper';
-
+import axios from 'axios';
 interface ProductImage {
   url: string;
 }
@@ -59,11 +58,9 @@ const ProductDetailScreen = () => {
 
   const styles = theme === 'dark' ? darkStyles : lightStyles;
 
-  // Put your API base URL here
   const API_BASE_URL = 'https://backend-practice.eurisko.me/api';
   const API_BASE_URL_UPLOAD = 'https://backend-practice.eurisko.me';
 
-  // Put your actual token here or get it from context/storage
   const authToken = accessToken;
 
   useEffect(() => {

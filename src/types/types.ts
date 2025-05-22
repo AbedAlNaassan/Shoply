@@ -1,4 +1,3 @@
-// types.ts (or any file where you store types)
 export type RootStackParamList = {
   Home: {screen: string};
   Login: {screen: string};

@@ -1,7 +1,6 @@
 import {View, Text, Alert} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
 import VerificationForm from '../../components/organisms/VerificationForm';
 import BlueButtons from '../../components/atoms/BlueButtons';
 import {lightStyles} from '../../styles/Verification.light';
@@ -12,10 +11,8 @@ import {useAuthStore} from '../../zustand/AuthStore';
 import {resendOtp} from '../../api/auth';
 
 const VerificationScreen = () => {
+  const {logout, email} = useAuthStore();
   const {theme} = useTheme();
-  const {logout} = useAuthStore();
-  const {email} = useAuthStore();
-
   const styles = theme === 'dark' ? darkStyles : lightStyles;
 
   const handelLogout = () => {

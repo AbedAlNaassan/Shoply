@@ -36,7 +36,6 @@ import {
 const pixelScale = PixelRatio.getFontScale();
 const {height} = Dimensions.get('window');
 
-// Validation schema for the form using Zod
 const productSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   description: z.string().min(1, 'Description is required'),
@@ -49,16 +48,14 @@ const productSchema = z.object({
 });
 
 type ProductForm = z.infer<typeof productSchema>;
-
 type EditProductScreenRouteProp = RouteProp<RootStackParamList, 'EditProduct'>;
 
 const EditProductScreen = () => {
-  const navigation = useNavigation();
   const route = useRoute<EditProductScreenRouteProp>();
+  const navigation = useNavigation();
   const {id} = route.params;
   const {theme} = useTheme();
   const styles = theme === 'dark' ? darkStyles : lightStyles;
-
   const accessToken = useAuthStore(state => state.accessToken);
 
   // Local state
@@ -129,7 +126,7 @@ const EditProductScreen = () => {
 
     fetchProduct();
   }, [id, accessToken, reset]);
-  // Request permission for gallery access
+
   const requestGalleryPermission = async (): Promise<boolean> => {
     const permission =
       Platform.OS === 'ios'

@@ -8,15 +8,15 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import BlueButtons from '../atoms/BlueButtons';
 import {useNavigation} from '@react-navigation/native';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {z} from 'zod';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../types/types';
 import {useAuthStore} from '../../zustand/AuthStore';
+import SpinnerScreen from '../organisms/SpinnerScreen';
+import {zodResolver} from '@hookform/resolvers/zod';
+import BlueButtons from '../atoms/BlueButtons';
 import {loginApi} from '../../api/auth';
-import SpinnerScreen from '../organisms/SpinnerScreen'; // <-- Import Spinner
+import {z} from 'zod';
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email format'),
@@ -29,7 +29,7 @@ const height = Dimensions.get('screen').height;
 
 const LoginForm = () => {
   const navigation = useNavigation<NavigationProp>();
-  const [loading, setLoading] = useState(false); // <-- New loading state
+  const [loading, setLoading] = useState(false);
 
   const {
     control,
@@ -101,7 +101,6 @@ const LoginForm = () => {
   return (
     <View style={styles.formContainerStyle}>
       {loading && <SpinnerScreen />}
-      {/* Email Input */}
       <Controller
         control={control}
         name="email"
@@ -120,7 +119,6 @@ const LoginForm = () => {
         rules={{required: 'Email is required'}}
       />
       {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
-      {/* Password Input */}
       <Controller
         control={control}
         name="password"

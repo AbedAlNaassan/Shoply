@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../types/types';
 import {fetchProducts} from '../../api/GetProducts';
@@ -49,7 +49,6 @@ const ProductList: React.FC<ProductListProps> = ({scrollEnabled = true}) => {
   const [hasNextPage, setHasNextPage] = useState(true);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
-
   const accessToken = useAuthStore(state => state.accessToken);
   const userEmail = useAuthStore(state => state.email);
   const navigation = useNavigation<NavigationProp>();
@@ -71,11 +70,14 @@ const ProductList: React.FC<ProductListProps> = ({scrollEnabled = true}) => {
 
         const response = await fetchProducts(
           pageToLoad,
-          8,
-          undefined, // No sort field
-          undefined, // No sort order
+          1000,
+          undefined,
+          undefined,
           accessToken,
         );
+
+        console.log('API products:', response.data);
+        console.log('User Email:', userEmail);
 
         if (response.success) {
           const newProducts = response.data.filter(
@@ -116,10 +118,13 @@ const ProductList: React.FC<ProductListProps> = ({scrollEnabled = true}) => {
     [accessToken, userEmail],
   );
 
-  useEffect(() => {
-    if (!accessToken) return;
-    loadProducts(1, true);
-  }, [accessToken, loadProducts]);
+  useFocusEffect(
+    useCallback(() => {
+      if (accessToken) {
+        loadProducts(1, true);
+      }
+    }, [accessToken, loadProducts]),
+  );
 
   const handleLoadMore = () => {
     if (hasNextPage) {

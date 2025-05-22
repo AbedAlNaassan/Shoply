@@ -12,7 +12,6 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-
 import {RootStackParamList} from '../../types/types';
 import {useTheme} from '../../context/ThemeContext';
 import {getLightStyles} from '../../styles/Welcome.light';

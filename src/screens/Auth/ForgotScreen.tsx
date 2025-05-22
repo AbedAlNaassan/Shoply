@@ -1,15 +1,21 @@
-import {View, Text, TextInput, StyleSheet, Dimensions} from 'react-native';
 import React from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Dimensions,
+  Alert,
+} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
-import BlueButtons from '../../components/atoms/BlueButtons';
 import {useNavigation} from '@react-navigation/native';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {z} from 'zod';
 import {StackNavigationProp} from '@react-navigation/stack';
+import BlueButtons from '../../components/atoms/BlueButtons';
 import {RootStackParamList} from '../../types/types';
-import axios from 'axios';
-import {Alert} from 'react-native';
 import {useTheme} from '../../context/ThemeContext';
+import {zodResolver} from '@hookform/resolvers/zod';
+import axios from 'axios';
+import {z} from 'zod';
 
 const ForgotSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email format'),
@@ -22,10 +28,7 @@ const height = Dimensions.get('screen').height;
 const LoginForm = () => {
   const navigation = useNavigation<NavigationProp>();
   const {theme} = useTheme();
-
   const styles = theme === 'dark' ? darkStyles : lightStyles;
-
-  // Using useWindowDimensions for dynamic resizing
 
   const {
     control,
@@ -57,11 +60,8 @@ const LoginForm = () => {
     }
   };
 
-  // Define dynamic style here
-
   return (
     <View style={styles.formContainerStyle}>
-      {/* Email Input */}
       <Controller
         control={control}
         name="email"
@@ -82,10 +82,7 @@ const LoginForm = () => {
       {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
 
       <BlueButtons name="Forgot" onPress={handleSubmit(onSubmit)} />
-      <BlueButtons
-        name="Back"
-        onPress={() => navigation.navigate('Welcome', {screen: 'Welcome'})}
-      />
+      <BlueButtons name="Back" onPress={() => navigation.navigate('Welcome')} />
     </View>
   );
 };

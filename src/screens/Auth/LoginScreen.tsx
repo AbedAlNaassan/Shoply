@@ -14,11 +14,9 @@ import {useTheme} from '../../context/ThemeContext';
 const pixel = PixelRatio.getFontScale();
 
 const LoginScreen = () => {
-  const {theme} = useTheme();
-
   const width = Dimensions.get('screen').width;
-  const height = Dimensions.get('screen').height; // Automatically get screen dimensions
-
+  const height = Dimensions.get('screen').height;
+  const {theme} = useTheme();
   const styles =
     theme === 'dark' ? darkStyles(width, height) : lightStyles(width, height);
 
