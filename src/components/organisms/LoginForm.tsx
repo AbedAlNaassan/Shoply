@@ -1,14 +1,22 @@
-import {View, Text, TextInput, StyleSheet} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Dimensions,
+  Alert,
+} from 'react-native';
+import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import BlueButtons from '../atoms/BlueButtons';
 import {useNavigation} from '@react-navigation/native';
-import {useAuth} from '../../context/AuthContext';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../types/types';
-import {useWindowDimensions} from 'react-native';
+import {useAuthStore} from '../../zustand/AuthStore';
+import {loginApi} from '../../api/auth';
+import SpinnerScreen from '../organisms/SpinnerScreen'; // <-- Import Spinner
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email format'),
@@ -17,13 +25,11 @@ const loginSchema = z.object({
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Verification'>;
 type LoginFormData = z.infer<typeof loginSchema>;
+const height = Dimensions.get('screen').height;
 
 const LoginForm = () => {
   const navigation = useNavigation<NavigationProp>();
-  const {login} = useAuth();
-
-  // Using useWindowDimensions for dynamic resizing
-  const {width, height} = useWindowDimensions();
+  const [loading, setLoading] = useState(false); // <-- New loading state
 
   const {
     control,
@@ -34,28 +40,67 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log(data);
-    const isLoginSuccessful = login(data.email, data.password);
-
-    if (!isLoginSuccessful) {
-      setError('password', {
-        type: 'manual',
-        message: 'Username or Password is incorrect',
+  const onSubmit = async (data: LoginFormData) => {
+    setLoading(true); // Start loading spinner
+    try {
+      const response = await loginApi({
+        email: data.email,
+        password: data.password,
+        token_expires_in: '1y',
       });
+
+      console.log('Login successful:', response);
+
+      useAuthStore.getState().setUser({email: data.email});
+      useAuthStore.getState().setTokens({
+        accessToken: response.data.accessToken,
+        refreshToken: response.data.refreshToken,
+      });
+      useAuthStore.getState().setIsNewUser(false);
+      useAuthStore.getState().setIsVerified(true);
+      useAuthStore.getState().setEmail(data.email);
+    } catch (error: any) {
+      const errorMessage = error?.error?.message || error?.message;
+
+      console.log('Login Error:', errorMessage);
+
+      if (
+        errorMessage === 'Network Error' ||
+        errorMessage === 'Request failed with status code 500'
+      ) {
+        Alert.alert(
+          'Login Failed',
+          'Unable to connect to the server. Please try again.',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+            {
+              text: 'Retry',
+              onPress: () => handleSubmit(onSubmit)(), // Retry the same function
+            },
+          ],
+        );
+      } else if (errorMessage === 'Please verify your email first') {
+        useAuthStore.getState().setUser({email: data.email});
+        useAuthStore.getState().setEmail(data.email);
+        useAuthStore.getState().setIsNewUser(true);
+        useAuthStore.getState().setIsVerified(false);
+      } else {
+        setError('password', {
+          type: 'manual',
+          message: 'Incorrect email or password',
+        });
+      }
+    } finally {
+      setLoading(false); // Stop loading spinner
     }
   };
 
-  // Define dynamic style here
-  const formContainerStyle = {
-    width: width,
-    height: height * 0.65,
-    justifyContent: 'flex-start' as 'flex-start',
-    alignItems: 'center' as 'center',
-  };
-
   return (
-    <View style={formContainerStyle}>
+    <View style={styles.formContainerStyle}>
+      {loading && <SpinnerScreen />}
       {/* Email Input */}
       <Controller
         control={control}
@@ -75,7 +120,6 @@ const LoginForm = () => {
         rules={{required: 'Email is required'}}
       />
       {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
-
       {/* Password Input */}
       <Controller
         control={control}
@@ -85,7 +129,7 @@ const LoginForm = () => {
             style={styles.input}
             placeholder="academy2025"
             placeholderTextColor="gray"
-            secureTextEntry={true} // Makes the password hidden
+            secureTextEntry={true}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -96,12 +140,12 @@ const LoginForm = () => {
       {errors.password && (
         <Text style={styles.error}>{errors.password.message}</Text>
       )}
-
       <BlueButtons name="Login" onPress={handleSubmit(onSubmit)} />
       <BlueButtons
-        name="Back"
-        onPress={() => navigation.navigate('Welcome', {screen: 'Welcome'})}
+        name="Forgot Password"
+        onPress={() => navigation.navigate('Forgot')}
       />
+      <BlueButtons name="Back" onPress={() => navigation.navigate('Welcome')} />
     </View>
   );
 };
@@ -109,8 +153,14 @@ const LoginForm = () => {
 export default LoginForm;
 
 const styles = StyleSheet.create({
+  formContainerStyle: {
+    width: '100%',
+    height: height * 0.7,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
   input: {
-    width: '80%',
+    width: 320,
     padding: 15,
     marginTop: 20,
     borderColor: '#ccc',
@@ -121,7 +171,7 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     marginTop: 5,
-    width: '80%',
+    width: 300,
     textAlign: 'left',
     marginLeft: 30,
   },

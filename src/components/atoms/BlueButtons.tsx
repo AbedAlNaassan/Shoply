@@ -8,7 +8,12 @@ type BlueButtonProps = {
 
 const BlueButtons = ({name, onPress}: BlueButtonProps) => {
   return (
-    <Pressable style={styles.button} onPress={onPress}>
+    <Pressable
+      style={({pressed}) => [
+        styles.button,
+        {opacity: pressed ? 0.5 : 1}, // this line adds the feedback
+      ]}
+      onPress={onPress}>
       <Text style={styles.buttonText}>{name}</Text>
     </Pressable>
   );
@@ -20,13 +25,14 @@ export default BlueButtons;
 
 const styles = StyleSheet.create({
   button: {
-    width: '60%',
+    width: 240,
     padding: 15,
     marginTop: 10,
     backgroundColor: '#3A59D1', // Green background
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 10,
   },
   buttonText: {
     color: 'white',

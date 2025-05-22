@@ -1,19 +1,19 @@
-import {PixelRatio, StyleSheet} from 'react-native';
+import {Dimensions, PixelRatio, StyleSheet} from 'react-native';
 
 const pixel = PixelRatio.getFontScale();
 
+const height = Dimensions.get('window').height;
+
 export const lightStyles = StyleSheet.create({
   safearea: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  container: {
-    alignItems: 'center',
+    flexGrow: 1,
     backgroundColor: '#fff',
   },
   back: {
-    alignSelf: 'flex-start',
-    marginBottom: 10,
+    width: '100%',
+    height: height * 0.05,
+    justifyContent: 'center',
+    paddingLeft: 15,
   },
   title: {
     fontFamily: 'Roboto',
@@ -25,6 +25,7 @@ export const lightStyles = StyleSheet.create({
     fontWeight: '600',
     color: '#000',
     marginBottom: 10,
+    textAlign: 'center',
   },
   description: {
     color: '#555',
@@ -36,6 +37,7 @@ export const lightStyles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
+    marginTop: 20,
   },
   button: {
     backgroundColor: '#3A59D1',

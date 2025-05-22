@@ -5,44 +5,88 @@ import {
   TextInput,
   Dimensions,
   PixelRatio,
+  Alert,
 } from 'react-native';
 import React, {useRef} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../types/types';
-import {useNavigation} from '@react-navigation/native';
 import BlueButtons from '../atoms/BlueButtons';
+import {verifyOtp} from '../../api/auth';
+import {useAuthStore} from '../../zustand/AuthStore';
+import SpinnerScreen from './SpinnerScreen';
 
 const {width, height} = Dimensions.get('window');
 const pixel = PixelRatio.getFontScale();
-
-type NavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
 const codeSchema = z.object({
   code1: z.string().regex(/^[0-9]$/, 'Invalid'),
   code2: z.string().regex(/^[0-9]$/, 'Invalid'),
   code3: z.string().regex(/^[0-9]$/, 'Invalid'),
   code4: z.string().regex(/^[0-9]$/, 'Invalid'),
+  code5: z.string().regex(/^[0-9]$/, 'Invalid'),
+  code6: z.string().regex(/^[0-9]$/, 'Invalid'),
 });
 
 const VerificationForm = () => {
-  const navigation = useNavigation<NavigationProp>();
+  const email = useAuthStore(state => state.user?.email);
+  const {setIsNewUser, setIsVerified} = useAuthStore();
+  const [loading, setLoading] = React.useState(false);
 
   const inputRefs = [
     useRef<TextInput>(null),
     useRef<TextInput>(null),
     useRef<TextInput>(null),
     useRef<TextInput>(null),
+    useRef<TextInput>(null),
+    useRef<TextInput>(null),
   ];
 
-  const onSubmit = (data: CodeType) => {
-    const code = Object.values(data).join('');
-    console.log('Entered code:', code);
-    navigation.navigate('Home', {screen: 'Home'});
-  };
+  const onSubmit = async (data: CodeType) => {
+    if (!email) {
+      Alert.alert('Error', 'Email is missing. Please register or login again.');
+      return;
+    }
 
+    const otp = `${data.code1}${data.code2}${data.code3}${data.code4}${data.code5}${data.code6}`;
+    setLoading(true);
+    try {
+      const response = await verifyOtp(email, otp);
+      const successMessage = response.data?.message || 'Verification succeeded';
+
+      setLoading(false);
+      Alert.alert('Success', successMessage);
+
+      setIsNewUser(false);
+      setIsVerified(true);
+    } catch (error: any) {
+      console.log('Full OTP error:', JSON.stringify(error, null, 2));
+
+      if (error.response) {
+        Alert.alert(
+          'Verification failed',
+          error.response.data.message || 'Invalid OTP',
+        );
+      } else if (error.request) {
+        Alert.alert(
+          'Connection Error',
+          'Could not reach the server. Please try again.',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+            {
+              text: 'Retry',
+              onPress: () => onSubmit(data),
+            },
+          ],
+        );
+      } else {
+        Alert.alert('Verification failed', error.message || 'Unknown error');
+      }
+    }
+  };
   type CodeType = z.infer<typeof codeSchema>;
 
   const {
@@ -53,11 +97,13 @@ const VerificationForm = () => {
     resolver: zodResolver(codeSchema),
   });
 
+  if (loading) return <SpinnerScreen />;
+
   return (
     //make 4 input only take 1 number
     <View style={styles.container}>
       <View style={styles.codeInputContainer}>
-        {[1, 2, 3, 4].map((num, index) => (
+        {[1, 2, 3, 4, 5, 6].map((num, index) => (
           <Controller
             key={index}
             control={control}
@@ -73,7 +119,7 @@ const VerificationForm = () => {
                 maxLength={1}
                 onChangeText={text => {
                   onChange(text);
-                  if (text && index < 3) {
+                  if (text && index < 5) {
                     inputRefs[index + 1].current?.focus();
                   }
                 }}
@@ -87,7 +133,7 @@ const VerificationForm = () => {
 
       {/* One global error message */}
       {Object.keys(errors).length > 0 && (
-        <View style={styles.errorText}>
+        <View>
           <Text style={styles.text}>
             Please enter all digits correctly (0–9)
           </Text>
@@ -105,9 +151,9 @@ export default VerificationForm;
 
 const styles = StyleSheet.create({
   container: {
-    width: width,
-    flex: 1,
-    justifyContent: 'center',
+    width: '100%',
+    height: height * 0.2,
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   codeInputContainer: {
@@ -117,12 +163,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: '20',
-    marginTop: 15,
-    marginBottom: 15,
   },
   codeInput: {
-    width: width * 0.15,
-    height: height * 0.07,
+    width: width * 0.1,
+    height: '100%',
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 10,
@@ -130,14 +174,11 @@ const styles = StyleSheet.create({
     fontSize: pixel * 24,
     color: '#3A59D1',
   },
-  errorText: {
-    height: '6%',
-    marginBottom: 15,
-  },
   btnWrapper: {
     width: '100%',
-    flex: 1,
+    height: '70%',
     alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   text: {
     color: 'red',

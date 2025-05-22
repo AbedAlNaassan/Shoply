@@ -3,24 +3,20 @@ import {StyleSheet} from 'react-native';
 export const getLightStyles = (width: number, height: number, pixel: number) =>
   StyleSheet.create({
     container: {
-      width,
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+      flexGrow: 1,
     },
     textandImageContainer: {
-      width,
-      height: height * 0.8,
-      marginTop: height * 0.02,
+      width: '100%',
+      height: height * 0.7,
     },
     textContainer: {
-      height: height * 0.3,
+      height: '30%',
       justifyContent: 'center',
       alignItems: 'center',
     },
     ImageContainer: {
-      width,
-      height: height * 0.5,
+      width: '100%',
+      height: '70%',
       justifyContent: 'center',
       alignItems: 'center',
     },
@@ -41,22 +37,19 @@ export const getLightStyles = (width: number, height: number, pixel: number) =>
       fontSize: pixel * 20,
     },
     buttonContainer: {
-      height: height * 0.2,
+      height: height * 0.3,
       flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: height * 0.09,
-      paddingBottom: height * 0.05,
+      justifyContent: 'flex-start',
+      gap: '15',
     },
     button: {
-      width: '80%',
+      width: 300,
       height: 50,
       borderWidth: 1,
       borderRadius: 50,
       borderColor: '#3A59D1',
       justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: 10,
     },
     login: {
       width: '100%',

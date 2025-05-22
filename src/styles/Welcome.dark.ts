@@ -3,24 +3,20 @@ import {StyleSheet} from 'react-native';
 export const getDarkStyles = (width: number, height: number, pixel: number) =>
   StyleSheet.create({
     container: {
-      width,
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
       backgroundColor: '#12141C',
     },
     textandImageContainer: {
-      width,
-      height: height * 0.8,
-      marginTop: height * 0.02,
+      width: '100%',
+      height: height * 0.7,
     },
     textContainer: {
-      height: height * 0.3,
+      height: '30%',
       justifyContent: 'center',
       alignItems: 'center',
     },
     ImageContainer: {
-      height: height * 0.5,
+      width: '100%',
+      height: '70%',
       justifyContent: 'center',
       alignItems: 'center',
     },
@@ -29,13 +25,13 @@ export const getDarkStyles = (width: number, height: number, pixel: number) =>
       height: '100%',
     },
     shoply: {
-      fontSize: pixel * 40,
       fontFamily: 'Roboto',
+      fontSize: pixel * 40,
       color: '#3A59D1',
     },
     welcome: {
       fontSize: pixel * 40,
-      fontWeight: 'bold',
+      fontFamily: 'Roboto',
       color: 'gray',
     },
     text: {
@@ -43,22 +39,20 @@ export const getDarkStyles = (width: number, height: number, pixel: number) =>
       color: 'gray',
     },
     buttonContainer: {
-      height: height * 0.2,
+      height: height * 0.3,
       flexDirection: 'column',
+      justifyContent: 'flex-start',
       alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: height * 0.09,
-      paddingBottom: height * 0.05,
+      gap: '15',
     },
     button: {
-      width: '80%',
+      width: 300,
       height: 50,
       borderWidth: 1,
       borderRadius: 50,
       borderColor: '#3A59D1',
       justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: 10,
     },
     login: {
       width: '100%',

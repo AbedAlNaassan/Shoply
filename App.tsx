@@ -3,8 +3,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {StatusBar, StyleSheet} from 'react-native';
-
-import {AuthProvider} from './src/context/AuthContext';
 import {ThemeProvider, useTheme} from './src/context/ThemeContext';
 
 // Import the necessary navigation functions
@@ -27,11 +25,9 @@ const App = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <SafeAreaProvider>
-        <AuthProvider>
-          <ThemeProvider>
-            <AppContent />
-          </ThemeProvider>
-        </AuthProvider>
+        <ThemeProvider>
+          <AppContent />
+        </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

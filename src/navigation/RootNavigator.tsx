@@ -1,12 +1,26 @@
-import React from 'react';
-import AppStack from './AppStack';
+import {createStackNavigator} from '@react-navigation/stack';
 import AuthStack from './AuthStack';
-import {useAuth} from '../context/AuthContext';
+import AppStack from './AppStack';
+import VerificationScreen from '../screens/Auth/VerificationScreen';
+import {useAuthStore} from '../zustand/AuthStore';
 
-const RootNavigator = () => {
-  const {user} = useAuth();
+const RootStack = createStackNavigator();
 
-  return user ? <AppStack /> : <AuthStack />;
-};
+export default function RootNavigator() {
+  const user = useAuthStore(state => state.user);
+  const isNewUser = useAuthStore(state => state.isNewUser);
+  const isVerified = useAuthStore(state => state.isVerified);
+  const accessToken = useAuthStore(state => state.accessToken);
 
-export default RootNavigator;
+  return (
+    <RootStack.Navigator screenOptions={{headerShown: false}}>
+      {!user && <RootStack.Screen name="Auth" component={AuthStack} />}
+      {isNewUser && !isVerified && (
+        <RootStack.Screen name="Verification" component={VerificationScreen} />
+      )}
+      {accessToken && isVerified && (
+        <RootStack.Screen name="App" component={AppStack} />
+      )}
+    </RootStack.Navigator>
+  );
+}

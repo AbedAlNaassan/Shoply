@@ -8,18 +8,17 @@ import {
 } from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation} from '@react-navigation/native';
 
-import ProductData from '../../data/Products.json';
-import BackIcon from '../../assets/back.svg';
 import {RootStackParamList} from '../../types/types';
-import ProductList from '../../components/organisms/ProductList';
 import {useTheme} from '../../context/ThemeContext';
+import BackIcon from '../../assets/back.svg';
+import MyProducts from '../../components/organisms/MyProducts';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'ProductDetails'>;
 
-const {width, height} = Dimensions.get('window');
+const {height} = Dimensions.get('screen');
 const pixel = PixelRatio.getFontScale();
 
 const ProductListScreen = () => {
@@ -34,10 +33,9 @@ const ProductListScreen = () => {
         <Pressable onPress={() => navigation.goBack()}>
           <BackIcon width={30} height={30} />
         </Pressable>
-        <Text style={styles.title}>Phones List</Text>
+        <Text style={styles.title}>Owner List</Text>
       </View>
-
-      <ProductList data={ProductData.data} scrollEnabled={true} />
+      <MyProducts />
     </SafeAreaView>
   );
 };
@@ -46,36 +44,38 @@ export default ProductListScreen;
 
 const lightStyles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: '100%',
+    alignItems: 'center',
     backgroundColor: '#fff',
   },
   titleContainer: {
-    width: width,
-    height: height * 0.1, // Adjusted height for title section
+    width: '100%',
+    height: height * 0.1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 70,
     paddingHorizontal: 15,
+    justifyContent: 'space-evenly',
   },
   title: {
     fontSize: pixel * 30,
-    fontWeight: 'bold',
+    fontFamily: 'Roboto',
     color: '#3A59D1',
   },
 });
 
 const darkStyles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: '100%',
+    alignItems: 'center',
     backgroundColor: '#12141C',
   },
   titleContainer: {
-    width: width,
+    width: '100%',
     height: height * 0.1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 70,
     paddingHorizontal: 15,
+    justifyContent: 'space-evenly',
   },
   title: {
     fontSize: pixel * 30,

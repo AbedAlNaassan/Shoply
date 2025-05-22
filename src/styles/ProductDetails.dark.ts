@@ -1,14 +1,18 @@
-import {PixelRatio, StyleSheet} from 'react-native';
+import {Dimensions, PixelRatio, StyleSheet} from 'react-native';
 const pixel = PixelRatio.getFontScale();
+
+const height = Dimensions.get('window').height;
 
 export const darkStyles = StyleSheet.create({
   safearea: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#12141C',
   },
   container: {
-    alignItems: 'center',
-    backgroundColor: '#12141C',
+    width: '100%',
+    height: height * 0.05,
+    justifyContent: 'center',
+    paddingLeft: 15,
   },
   back: {
     alignSelf: 'flex-start',
@@ -24,6 +28,7 @@ export const darkStyles = StyleSheet.create({
     fontWeight: '600',
     color: '#3A59D1',
     marginBottom: 10,
+    textAlign: 'center',
   },
   description: {
     color: '#555',
@@ -35,6 +40,7 @@ export const darkStyles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
+    marginTop: 20,
   },
   button: {
     backgroundColor: '#3A59D1',

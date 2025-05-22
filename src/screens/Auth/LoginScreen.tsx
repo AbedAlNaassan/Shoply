@@ -1,23 +1,30 @@
 import React from 'react';
-import {View, Text, StyleSheet, PixelRatio, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  PixelRatio,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import LoginForm from '../../components/organisms/LoginForm';
 import {useTheme} from '../../context/ThemeContext';
-import {useWindowDimensions} from 'react-native';
 
 const pixel = PixelRatio.getFontScale();
 
 const LoginScreen = () => {
   const {theme} = useTheme();
 
-  const {width, height} = useWindowDimensions(); // Automatically get screen dimensions
+  const width = Dimensions.get('screen').width;
+  const height = Dimensions.get('screen').height; // Automatically get screen dimensions
 
   const styles =
     theme === 'dark' ? darkStyles(width, height) : lightStyles(width, height);
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+      <ScrollView>
         <View style={styles.header}>
           <Text style={styles.title}>Login Page</Text>
         </View>
@@ -30,19 +37,11 @@ const LoginScreen = () => {
 const lightStyles = (width: number, height: number) =>
   StyleSheet.create({
     container: {
-      flex: 1, // Use flex to take the full available space
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    scrollViewContainer: {
       flexGrow: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      paddingBottom: 20,
     },
     header: {
-      width: width,
-      height: height * 0.35,
+      width: '100%',
+      height: height * 0.3,
       justifyContent: 'center',
       alignItems: 'center',
     },
@@ -56,20 +55,12 @@ const lightStyles = (width: number, height: number) =>
 const darkStyles = (width: number, height: number) =>
   StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#12141C',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    scrollViewContainer: {
       flexGrow: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      paddingBottom: 20,
+      backgroundColor: '#12141C',
     },
     header: {
-      width: width,
-      height: height * 0.35,
+      width: '100%',
+      height: height * 0.3,
       justifyContent: 'center',
       alignItems: 'center',
     },

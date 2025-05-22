@@ -1,74 +1,61 @@
-import {View, Text, TextInput, Image, Pressable} from 'react-native';
-import React from 'react';
+import {View, Text, Image, Pressable} from 'react-native';
+import React, {useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useForm, Controller} from 'react-hook-form';
-import productData from '../../data/Products.json';
 
-import {RootStackParamList} from '../../types/types';
-import {useAuth} from '../../context/AuthContext';
-import LogoutIcon from '../../assets/Logout.svg';
-import Moon from '../../assets/moon.svg';
 import ProductList from '../../components/organisms/ProductList';
+import {ScrollView} from 'react-native-gesture-handler';
+import {RootStackParamList} from '../../types/types';
 import {useTheme} from '../../context/ThemeContext';
 import {lightStyles} from '../../styles/Home.light';
+import LogoutIcon from '../../assets/Logout.svg';
 import {darkStyles} from '../../styles/Home.dark';
-import {ScrollView} from 'react-native-gesture-handler';
+import Moon from '../../assets/moon.svg';
+import {useAuthStore} from '../../zustand/AuthStore';
+import Profile from '../../assets/profile.svg';
+import BlueButtons from '../../components/atoms/BlueButtons';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-  const {logout} = useAuth();
   const {theme, toggleTheme} = useTheme();
+  const {logout} = useAuthStore();
+  const accessToken = useAuthStore(state => state.accessToken);
+
+  useEffect(() => {
+    console.log('Access Token from Zustand:', accessToken);
+  }, [accessToken]);
 
   const styles = theme === 'dark' ? darkStyles : lightStyles;
-
-  const {control, handleSubmit} = useForm({
-    defaultValues: {
-      search: '',
-    },
-  });
 
   const handleLogout = () => {
     logout();
   };
 
-  const onSearchSubmit = (data: {search: string}) => {
-    console.log('Search Term:', data.search);
+  const handleProfile = () => {
+    navigation.navigate('Profile');
+  };
+
+  const onSearch = () => {
+    navigation.navigate('Search');
     // You can add actual search logic here
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+      <ScrollView>
         <View style={styles.header}>
           <Text style={styles.shoply}>Shoply</Text>
           <View style={styles.icon}>
+            <Pressable>
+              <Profile width={30} height={30} onPress={handleProfile} />
+            </Pressable>
             <Moon width={30} height={30} onPress={toggleTheme} />
             <Pressable onPress={handleLogout}>
               <LogoutIcon width={24} height={24} />
             </Pressable>
           </View>
-        </View>
-
-        <View style={styles.searchContainer}>
-          <Controller
-            control={control}
-            name="search"
-            render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Search"
-                placeholderTextColor="gray"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                returnKeyType="search"
-                onSubmitEditing={handleSubmit(onSearchSubmit)}
-              />
-            )}
-          />
         </View>
 
         <View style={styles.imageContainer}>
@@ -78,16 +65,20 @@ const HomeScreen = () => {
           />
         </View>
 
+        <View style={styles.searchContainer}>
+          <BlueButtons name="Search" onPress={onSearch} />
+        </View>
+
         <View style={styles.bestSeller}>
-          <Text style={styles.shoply}>Best Sellers</Text>
+          <Text style={styles.shoply}>All Products</Text>
           <Pressable
             onPress={() =>
               navigation.navigate('ProductList', {screen: 'ProductList'})
             }>
-            <Text style={styles.seeAll}>See All</Text>
+            <Text style={styles.seeAll}>Owner Product</Text>
           </Pressable>
         </View>
-        <ProductList data={productData.data} limit={4} scrollEnabled={false} />
+        <ProductList scrollEnabled={false} />
       </ScrollView>
     </SafeAreaView>
   );

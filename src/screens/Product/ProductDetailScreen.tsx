@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,32 +8,114 @@ import {
   useWindowDimensions,
   Share,
   Pressable,
+  ActivityIndicator,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useRoute, useNavigation} from '@react-navigation/native';
+import MapView, {Marker} from 'react-native-maps';
 
-import productData from '../../data/Products.json';
-import BackIcon from '../../assets/back.svg';
-import ShareIcon from '../../assets/share.svg';
-import {useTheme} from '../../context/ThemeContext';
+import axios from 'axios';
+
 import {darkStyles} from '../../styles/ProductDetails.dark';
 import {lightStyles} from '../../styles/ProductDetails.light';
+import {useTheme} from '../../context/ThemeContext';
+import ShareIcon from '../../assets/share.svg';
+import BackIcon from '../../assets/back.svg';
+import {useAuthStore} from '../../zustand/AuthStore';
+import {PermissionsAndroid, Platform, Alert} from 'react-native';
+import RNFS from 'react-native-fs';
+import Swiper from 'react-native-swiper';
+
+interface ProductImage {
+  url: string;
+}
+
+interface Product {
+  _id: string;
+  title: string;
+  price: number;
+  description: string;
+  images: ProductImage[];
+  location: {
+    name: string;
+    latitude: number;
+    longitude: number;
+  };
+  // add other properties if your product has more fields
+}
 
 const ProductDetailScreen = () => {
+  const {width} = useWindowDimensions();
   const route = useRoute();
   const navigation = useNavigation();
   const {theme} = useTheme();
-
-  const {width} = useWindowDimensions();
+  const accessToken = useAuthStore(state => state.accessToken);
 
   const {id} = route.params as {id: string};
-  const product = productData.data.find(item => item._id === id);
+
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const styles = theme === 'dark' ? darkStyles : lightStyles;
+
+  // Put your API base URL here
+  const API_BASE_URL = 'https://backend-practice.eurisko.me/api';
+  const API_BASE_URL_UPLOAD = 'https://backend-practice.eurisko.me';
+
+  // Put your actual token here or get it from context/storage
+  const authToken = accessToken;
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        const response = await axios.get(`${API_BASE_URL}/products/${id}`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+        setProduct(response.data.data);
+      } catch (err: any) {
+        console.error(err);
+
+        let status = err?.response?.status;
+
+        // Handle 521 or other network errors
+        if (status === 521 || !err.response) {
+          Alert.alert(
+            'Server Error',
+            'Failed to load product. Server might be down.',
+            [
+              {
+                text: 'Cancel',
+                style: 'cancel',
+              },
+              {
+                text: 'Retry',
+                onPress: () => fetchProduct(),
+              },
+            ],
+            {cancelable: true},
+          );
+        } else {
+          setError('Failed to load product. Please try again.');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [id, authToken]);
+
   const handleShare = async () => {
+    if (!product) return;
+
     try {
       await Share.share({
-        message: `${product?.title} - ${product?.price}$\nCheck it out!`,
+        message: `${product.title} - ${product.price}$\nCheck it out!`,
       });
     } catch (error) {
       console.log('Error sharing:', error);
@@ -41,9 +123,28 @@ const ProductDetailScreen = () => {
   };
 
   const handleAddToCart = () => {
-    // Placeholder for cart logic
     console.log(`Product "${product?.title}" added to cart.`);
   };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.safearea}>
+        <ActivityIndicator
+          size="large"
+          color="#0000ff"
+          style={{marginTop: 50}}
+        />
+      </SafeAreaView>
+    );
+  }
+
+  if (error) {
+    return (
+      <SafeAreaView style={styles.errorContainer}>
+        <Text style={styles.error}>{error}</Text>
+      </SafeAreaView>
+    );
+  }
 
   if (!product) {
     return (
@@ -53,26 +154,84 @@ const ProductDetailScreen = () => {
     );
   }
 
+  const saveImage = async (url: string) => {
+    try {
+      let hasPermission = false;
+
+      if (Platform.OS === 'android') {
+        const sdkVersion = Platform.Version;
+
+        if (sdkVersion >= 33) {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+          );
+          hasPermission = granted === PermissionsAndroid.RESULTS.GRANTED;
+        } else {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          );
+          hasPermission = granted === PermissionsAndroid.RESULTS.GRANTED;
+        }
+
+        if (!hasPermission) {
+          Alert.alert(
+            'Permission Denied',
+            'Cannot save image without permission',
+          );
+          return;
+        }
+      }
+
+      const fileName = url.split('/').pop();
+      const downloadDest = `${RNFS.PicturesDirectoryPath}/${fileName}`;
+
+      const download = RNFS.downloadFile({
+        fromUrl: url,
+        toFile: downloadDest,
+      });
+
+      const result = await download.promise;
+
+      if (result.statusCode === 200) {
+        Alert.alert('Success', 'Image saved to gallery');
+      } else {
+        Alert.alert('Error', 'Failed to save image');
+      }
+    } catch (err) {
+      console.error(err);
+      Alert.alert('Error', 'Something went wrong');
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safearea}>
-      <ScrollView
-        contentContainerStyle={[
-          styles.container,
-          {flexGrow: 1, padding: width * 0.05},
-        ]}>
+      <ScrollView>
         <Pressable onPress={() => navigation.goBack()} style={styles.back}>
           <BackIcon width={30} height={30} />
         </Pressable>
 
-        <Image
-          source={{uri: product.images[0].url}}
-          style={{
-            width: width * 0.7,
-            height: width * 0.7,
-            marginVertical: width * 0.05,
-          }}
-          resizeMode="contain"
-        />
+        <Swiper
+          style={{height: 300}}
+          showsPagination
+          loop
+          autoplay
+          dotStyle={{backgroundColor: '#ccc'}}
+          activeDotStyle={{backgroundColor: '#000'}}>
+          {product.images.map((image, index) => (
+            <TouchableOpacity
+              key={index}
+              onLongPress={() =>
+                saveImage(`${API_BASE_URL_UPLOAD}${image.url}`)
+              }
+              activeOpacity={0.9}>
+              <Image
+                source={{uri: `${API_BASE_URL_UPLOAD}${image.url}`}}
+                style={{width: '100%', height: 300}}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          ))}
+        </Swiper>
 
         <Text style={[styles.title, {fontSize: width * 0.06}]}>
           {product.title}
@@ -83,6 +242,31 @@ const ProductDetailScreen = () => {
         <Text style={[styles.description, {fontSize: width * 0.045}]}>
           {product.description}
         </Text>
+
+        {product.location && (
+          <MapView
+            style={{
+              width: 350,
+              height: 200,
+              alignSelf: 'center',
+              marginTop: 20,
+            }}
+            initialRegion={{
+              latitude: product.location.latitude,
+              longitude: product.location.longitude,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}>
+            <Marker
+              coordinate={{
+                latitude: product.location.latitude,
+                longitude: product.location.longitude,
+              }}
+              title={product.title}
+              description={product.description}
+            />
+          </MapView>
+        )}
 
         <View style={styles.buttonsContainer}>
           <TouchableOpacity style={styles.button} onPress={handleAddToCart}>

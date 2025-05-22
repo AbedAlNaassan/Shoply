@@ -6,7 +6,8 @@ import {
   Easing,
   Pressable,
   ScrollView,
-  useWindowDimensions,
+  Dimensions,
+  PixelRatio,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
@@ -16,16 +17,16 @@ import {RootStackParamList} from '../../types/types';
 import {useTheme} from '../../context/ThemeContext';
 import {getLightStyles} from '../../styles/Welcome.light';
 import {getDarkStyles} from '../../styles/Welcome.dark';
-import {PixelRatio} from 'react-native';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
 const WelcomeScreen = () => {
-  const {width, height} = useWindowDimensions();
-  const pixel = PixelRatio.getFontScale();
-  const {theme} = useTheme();
   const slideAnim = useRef(new Animated.Value(300)).current;
   const navigation = useNavigation<NavigationProp>();
+  const width = Dimensions.get('window').width;
+  const height = Dimensions.get('window').height;
+  const pixel = PixelRatio.getFontScale();
+  const {theme} = useTheme();
 
   const styles =
     theme === 'dark'
@@ -43,9 +44,7 @@ const WelcomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        contentContainerStyle={{flexGrow: 1}}
-        showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.textandImageContainer}>
           <View style={styles.textContainer}>
             <Text style={[styles.shoply]}>Shoply</Text>
@@ -63,11 +62,13 @@ const WelcomeScreen = () => {
             />
           </View>
         </View>
-
         <View style={styles.buttonContainer}>
           <Pressable
             onPress={() => navigation.navigate('Login', {screen: 'Login'})}
-            style={styles.login}>
+            style={({pressed}) => [
+              styles.login,
+              {opacity: pressed ? 0.5 : 1}, // this line adds the feedback
+            ]}>
             <View style={styles.button}>
               <Text style={styles.textButton}>Login</Text>
             </View>
@@ -77,7 +78,10 @@ const WelcomeScreen = () => {
             onPress={() =>
               navigation.navigate('Register', {screen: 'Register'})
             }
-            style={styles.register}>
+            style={({pressed}) => [
+              styles.register,
+              {opacity: pressed ? 0.5 : 1}, // this line adds the feedback
+            ]}>
             <View style={styles.button}>
               <Text style={styles.textButton}>SignUp</Text>
             </View>

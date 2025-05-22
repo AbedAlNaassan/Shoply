@@ -21,7 +21,7 @@ const RegisterScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView>
         <View style={styles.header}>
           <Text style={styles.title}>SignUp</Text>
         </View>
@@ -33,18 +33,12 @@ const RegisterScreen = () => {
 
 const lightStyles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    width: '100%',
   },
   header: {
     width: '100%',
-    height: height * 0.2,
-    justifyContent: 'flex-end',
+    height: height * 0.3,
+    justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
@@ -56,18 +50,12 @@ const lightStyles = StyleSheet.create({
 
 const darkStyles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#12141C',
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
   },
   header: {
     width: '100%',
-    height: height * 0.2,
-    justifyContent: 'flex-end',
+    height: height * 0.3,
+    justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
