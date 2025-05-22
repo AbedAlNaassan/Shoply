@@ -1,3 +1,10 @@
+import java.util.Properties
+
+def dotenv = new Properties()
+file("$rootDir/.env").withInputStream { stream ->
+    dotenv.load(stream)
+}
+
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
@@ -85,6 +92,9 @@ android {
         versionCode 1
         versionName "1.0"
         missingDimensionStrategy 'react-native-camera', 'general'
+        manifestPlaceholders = [
+    googleMapsKey: dotenv['GOOGLE_MAPS_API_KEY'] ?: ""
+]
     }
     signingConfigs {
         debug {
