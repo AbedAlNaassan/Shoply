@@ -159,7 +159,6 @@ const ProductList: React.FC<ProductListProps> = ({scrollEnabled = true}) => {
 
             Alert.alert('Success', 'Product deleted successfully');
             loadProducts();
-            // Optional: refresh data or navigate back
           } catch (error: any) {
             console.error('Delete failed:', error);
             Alert.alert('Error', 'Failed to delete product.');

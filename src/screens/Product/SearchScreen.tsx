@@ -55,7 +55,6 @@ const SearchScreen = () => {
       setProducts(response.data.data);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
-        // No response means network error
         if (!err.response) {
           Alert.alert(
             'Connection Error',
@@ -72,7 +71,6 @@ const SearchScreen = () => {
             {cancelable: false},
           );
         } else if (err.response.status >= 500 && err.response.status < 600) {
-          // Server error (5xx)
           Alert.alert(
             'Server Error',
             `Server returned error ${err.response.status}. Would you like to retry?`,
@@ -88,7 +86,6 @@ const SearchScreen = () => {
             {cancelable: false},
           );
         } else {
-          // Other HTTP errors
           setError(`Error: ${err.response.status} ${err.response.statusText}`);
         }
       } else if (err instanceof Error) {

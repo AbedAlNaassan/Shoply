@@ -170,6 +170,9 @@ const AddProductScreen = () => {
     formData.append('price', data.price);
     formData.append('location', JSON.stringify(marker));
 
+    console.log(formData);
+    console.log(accessToken);
+
     images.forEach((img, index) => {
       formData.append('images', {
         uri: img.uri!,
@@ -193,6 +196,7 @@ const AddProductScreen = () => {
       Alert.alert('Success', 'Product added successfully');
     } catch (error) {
       setLoading(false);
+      console.log(error);
       Alert.alert('Failed', 'Error submitting product. Try again later.');
     }
   };
