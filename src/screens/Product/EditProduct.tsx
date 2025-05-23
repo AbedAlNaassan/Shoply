@@ -96,7 +96,6 @@ const EditProductScreen = () => {
           longitude: 35.5018,
         };
 
-        // Just set marker directly (no comparison)
         setMarker(loc);
 
         reset({
