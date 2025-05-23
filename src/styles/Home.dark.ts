@@ -31,7 +31,7 @@ export const darkStyles = StyleSheet.create({
   },
   searchContainer: {
     width: '100%',
-    height: height * 0.1,
+    height: height * 0.2,
     justifyContent: 'center',
     alignItems: 'center',
   },
