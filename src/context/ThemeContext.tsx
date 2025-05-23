@@ -7,20 +7,16 @@ import React, {
 } from 'react';
 import {useColorScheme} from 'react-native';
 
-// Define theme type
 type Theme = 'light' | 'dark';
 
-// Define the context type
 interface ThemeContextType {
   theme: Theme;
   isDarkMode: boolean;
   toggleTheme: () => void;
 }
 
-// Create context with default value as undefined
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-// Custom hook to use the theme context
 export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext);
   if (!context) {
@@ -29,12 +25,10 @@ export const useTheme = (): ThemeContextType => {
   return context;
 };
 
-// Define the ThemeProvider props interface
 interface ThemeProviderProps {
   children: ReactNode;
 }
 
-// ThemeProvider component to manage the theme context
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
   const systemTheme = useColorScheme(); // Get the system theme
   const [theme, setTheme] = useState<Theme>(systemTheme || 'light'); // Initialize theme state

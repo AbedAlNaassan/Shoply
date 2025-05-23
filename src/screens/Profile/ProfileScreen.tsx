@@ -36,8 +36,23 @@ type ProfileScreenNavigationProp = StackNavigationProp<
 const height = Dimensions.get('window').height;
 
 const profileSchema = z.object({
-  firstName: z.string().min(1, {message: 'First name is required'}),
-  lastName: z.string().min(1, {message: 'Last name is required'}),
+  firstName: z
+    .string()
+    .min(1, {message: 'First name is required'})
+    .max(50, {message: 'First name must be less than 50 characters'})
+    .regex(/^[A-Za-z\s'-]+$/, {
+      message:
+        'First name must contain only letters, spaces, apostrophes, or hyphens',
+    }),
+
+  lastName: z
+    .string()
+    .min(1, {message: 'Last name is required'})
+    .max(50, {message: 'Last name must be less than 50 characters'})
+    .regex(/^[A-Za-z\s'-]+$/, {
+      message:
+        'Last name must contain only letters, spaces, apostrophes, or hyphens',
+    }),
 });
 type ProfileFormData = z.infer<typeof profileSchema>;
 
@@ -261,10 +276,6 @@ const ProfileScreen = () => {
           )}
 
           <BlueButtons name="Save" onPress={handleSubmit(submitProfile)} />
-          <BlueButtons
-            name="AddItem"
-            onPress={() => navigation.navigate('AddProduct')}
-          />
           <BlueButtons name="Back" onPress={() => navigation.goBack()} />
         </View>
       </ScrollView>

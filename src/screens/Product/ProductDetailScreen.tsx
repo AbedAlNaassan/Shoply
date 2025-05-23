@@ -12,6 +12,7 @@ import {
   PermissionsAndroid,
   Platform,
   Alert,
+  Linking,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useRoute, useNavigation} from '@react-navigation/native';
@@ -40,7 +41,10 @@ interface Product {
     latitude: number;
     longitude: number;
   };
-  // add other properties if your product has more fields
+  user?: {
+    _id: string;
+    email: string;
+  };
 }
 
 const ProductDetailScreen = () => {
@@ -73,6 +77,7 @@ const ProductDetailScreen = () => {
             Authorization: `Bearer ${authToken}`,
           },
         });
+        console.log(response.data.data);
         setProduct(response.data.data);
       } catch (err: any) {
         console.error(err);
@@ -121,6 +126,15 @@ const ProductDetailScreen = () => {
 
   const handleAddToCart = () => {
     console.log(`Product "${product?.title}" added to cart.`);
+  };
+
+  const handleEmailOwner = () => {
+    if (product?.user?.email) {
+      const emailUrl = `mailto:${product.user.email}`;
+      Linking.openURL(emailUrl).catch(() => {
+        Alert.alert('Error', 'No email client available');
+      });
+    }
   };
 
   if (loading) {
@@ -273,6 +287,37 @@ const ProductDetailScreen = () => {
             <ShareIcon width={30} height={30} />
           </TouchableOpacity>
         </View>
+
+        {product.user && (
+          <View
+            style={{
+              padding: 15,
+              borderTopWidth: 1,
+              borderColor: '#ccc',
+              marginTop: 20,
+            }}>
+            <Text style={[styles.title, {fontSize: width * 0.05}]}>
+              Owner Details
+            </Text>
+            <Text
+              style={[
+                styles.description,
+                {fontSize: width * 0.045, marginVertical: 5},
+              ]}>
+              Email: {product.user.email}
+            </Text>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                {backgroundColor: '#007AFF', marginTop: 10},
+              ]}
+              onPress={handleEmailOwner}>
+              <Text style={[styles.buttonText, {color: 'white'}]}>
+                Email Owner
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

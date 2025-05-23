@@ -59,6 +59,10 @@ const HomeScreen = () => {
 
         <View style={styles.searchContainer}>
           <BlueButtons name="Search" onPress={onSearch} />
+          <BlueButtons
+            name="AddItem"
+            onPress={() => navigation.navigate('AddProduct')}
+          />
         </View>
 
         <View style={styles.bestSeller}>
