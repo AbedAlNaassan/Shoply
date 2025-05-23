@@ -2,15 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  PixelRatio,
   TextInput,
   Image,
   TouchableOpacity,
   Alert,
   Platform,
   ScrollView,
-  Dimensions,
-  StyleSheet,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Controller, useForm} from 'react-hook-form';
@@ -25,6 +22,8 @@ import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import SpinnerScreen from '../../components/organisms/SpinnerScreen';
 import {RootStackParamList} from '../../types/types';
 import {useTheme} from '../../context/ThemeContext';
+import {lightStyles} from '../../styles/EditProduct.light';
+import {darkStyles} from '../../styles/EditProduct.dark';
 import {
   PERMISSIONS,
   request,
@@ -32,9 +31,6 @@ import {
   RESULTS,
   openSettings,
 } from 'react-native-permissions';
-
-const pixelScale = PixelRatio.getFontScale();
-const {height} = Dimensions.get('window');
 
 const productSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -342,7 +338,6 @@ const EditProductScreen = () => {
             </MapView>
           </View>
 
-          {/* Submit Button */}
           <BlueButtons
             name="Update Product"
             onPress={handleSubmit(submitProduct)}
@@ -353,132 +348,5 @@ const EditProductScreen = () => {
     </SafeAreaView>
   );
 };
-
-const lightStyles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flex: 1,
-  },
-  header: {
-    width: '100%',
-    height: height * 0.2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 30 * pixelScale,
-    fontFamily: 'Roboto',
-    color: '#3A59D1',
-  },
-  main: {
-    width: '100%',
-    flex: 1,
-    alignItems: 'center',
-  },
-  input: {
-    width: 320,
-    padding: 15,
-    marginTop: 20,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 50,
-    color: '#3A59D1',
-  },
-  error: {
-    color: 'red',
-    marginTop: 5,
-    width: 300,
-    textAlign: 'left',
-    marginLeft: 30,
-  },
-  imagePickerButtons: {
-    marginVertical: 10,
-  },
-  link: {
-    color: '#3A59D1',
-  },
-  imagesContainer: {
-    marginVertical: 10,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    marginRight: 10,
-    borderRadius: 8,
-  },
-  mapContainer: {
-    height: 200,
-    width: 350,
-    borderRadius: 8,
-  },
-  map: {
-    flex: 1,
-  },
-});
-
-const darkStyles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flex: 1,
-    backgroundColor: '#12141C',
-  },
-  header: {
-    width: '100%',
-    height: height * 0.2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 30 * pixelScale,
-    fontFamily: 'Roboto',
-    color: '#3A59D1',
-  },
-  main: {
-    width: '100%',
-    flex: 1,
-    alignItems: 'center',
-  },
-  input: {
-    width: 320,
-    padding: 15,
-    marginTop: 20,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 50,
-    color: '#3A59D1',
-  },
-  error: {
-    color: 'red',
-    marginTop: 5,
-    width: 300,
-    textAlign: 'left',
-    marginLeft: 30,
-  },
-  imagePickerButtons: {
-    marginVertical: 10,
-  },
-  link: {
-    color: '#3A59D1',
-  },
-  imagesContainer: {
-    marginVertical: 10,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    marginRight: 10,
-    borderRadius: 8,
-  },
-  mapContainer: {
-    height: 200,
-    width: 350,
-    marginVertical: 10,
-    borderRadius: 8,
-    overflow: 'hidden',
-  },
-  map: {
-    flex: 1,
-  },
-});
 
 export default EditProductScreen;
