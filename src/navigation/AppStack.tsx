@@ -1,5 +1,5 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import ProductDetailScreen from '../screens/Product/ProductDetailScreen';
 import ProductListScreen from '../screens/Product/ProductListScreen';
 import HomeScreen from '../screens/Home/HomeScreen';
@@ -9,12 +9,17 @@ import AddProductScreen from '../screens/Product/AddProductScreen';
 import {RootStackParamList} from '../types/types';
 import EditProductScreen from '../screens/Product/EditProduct';
 import SearchScreen from '../screens/Product/SearchScreen';
+import CartScreen from '../screens/Cart/CarScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function AppStack() {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        ...TransitionPresets.SlideFromRightIOS,
+      }}>
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="ProductList" component={ProductListScreen} />
       <Stack.Screen name="ProductDetails" component={ProductDetailScreen} />
@@ -23,6 +28,7 @@ export default function AppStack() {
       <Stack.Screen name="AddProduct" component={AddProductScreen} />
       <Stack.Screen name="EditProduct" component={EditProductScreen} />
       <Stack.Screen name="Search" component={SearchScreen} />
+      <Stack.Screen name="Cart" component={CartScreen} />
     </Stack.Navigator>
   );
 }

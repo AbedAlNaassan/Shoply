@@ -14,6 +14,7 @@ export type RootStackParamList = {
   };
   EditProduct: {id: string};
   Search: undefined;
+  Cart: undefined;
 };
 
 export type RefreshTokenRequest = {
@@ -25,3 +26,14 @@ export type RefreshTokenResponse = {
   accessToken: string;
   refreshToken: string;
 };
+
+export interface Product {
+  id: number;
+  name: string;
+  price: number;
+  image?: string;
+}
+
+export interface CartItem extends Product {
+  quantity: number;
+}

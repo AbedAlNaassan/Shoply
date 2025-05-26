@@ -17,7 +17,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../types/types';
 import {fetchProducts} from '../../api/GetProducts';
 import {useAuthStore} from '../../zustand/AuthStore';
-import SpinnerScreen from './SpinnerScreen';
+import SkeletonProductCard from './SkeletonProductCard';
 
 const width = Dimensions.get('screen').width;
 const pixel = PixelRatio.getFontScale();
@@ -162,7 +162,17 @@ const ProductList: React.FC<ProductListProps> = ({scrollEnabled = true}) => {
   }
 
   if (initialLoading) {
-    return <SpinnerScreen />;
+    console.log('Rendering SkeletonProductCard...');
+    return (
+      <FlatList
+        data={Array.from({length: 6})} // Show 6 skeletons
+        keyExtractor={(_, index) => index.toString()}
+        renderItem={() => <SkeletonProductCard />}
+        contentContainerStyle={styles.list}
+        scrollEnabled={scrollEnabled}
+        numColumns={2}
+      />
+    );
   }
 
   return (

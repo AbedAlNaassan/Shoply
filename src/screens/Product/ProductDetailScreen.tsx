@@ -26,6 +26,9 @@ import {useAuthStore} from '../../zustand/AuthStore';
 import RNFS from 'react-native-fs';
 import Swiper from 'react-native-swiper';
 import axios from 'axios';
+import {useCartStore} from '../../zustand/Cart';
+// Adjust the path based on your structure
+
 interface ProductImage {
   url: string;
 }
@@ -53,6 +56,7 @@ const ProductDetailScreen = () => {
   const navigation = useNavigation();
   const {theme} = useTheme();
   const accessToken = useAuthStore(state => state.accessToken);
+  const addToCart = useCartStore(state => state.addToCart);
 
   const {id} = route.params as {id: string};
 
@@ -113,19 +117,35 @@ const ProductDetailScreen = () => {
   }, [id, authToken]);
 
   const handleShare = async () => {
-    if (!product) return;
+    const productId = product?._id;
+    if (!productId) return;
 
+    const url = `myapp://product/${productId}`;
     try {
       await Share.share({
-        message: `${product.title} - ${product.price}$\nCheck it out!`,
+        message: `${product.title} - ${product.price}$\nCheck it out here: ${url}`,
       });
     } catch (error) {
       console.log('Error sharing:', error);
     }
   };
-
   const handleAddToCart = () => {
-    console.log(`Product "${product?.title}" added to cart.`);
+    if (product) {
+      console.log(product.images);
+      const imageUrl = `https://backend-practice.eurisko.me${product.images[0]?.url}`;
+      const productForCart = {
+        id: product._id,
+        name: product.title,
+        price: product.price,
+        description: product.description,
+        image: imageUrl,
+        location: product.location,
+        user: product.user,
+        quantity: 1, // <-- Add this line
+      };
+      addToCart(productForCart);
+      navigation.navigate('Cart');
+    }
   };
 
   const handleEmailOwner = () => {
