@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import RegisterForm from '../../components/organisms/RegisterForm';
+import RegisterForm from '../../components/organisms/RegisterForm/RegisterForm';
 import {useTheme} from '../../context/ThemeContext';
 
 const {height} = Dimensions.get('window');

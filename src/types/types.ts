@@ -27,14 +27,14 @@ export type RefreshTokenResponse = {
   refreshToken: string;
 };
 
-// export interface Product {
-//   id: number;
-//   name: string;
-//   price: number;
-//   image?: string;
-// }
-
 export interface Product {
+  id: number;
+  name: string;
+  price: number;
+  image?: string;
+}
+
+export interface Products {
   _id: string;
   title: string;
   description: string;

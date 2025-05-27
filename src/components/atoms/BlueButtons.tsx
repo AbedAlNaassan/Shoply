@@ -3,7 +3,7 @@ import React from 'react';
 
 type BlueButtonProps = {
   name: string;
-  onPress: (data: any) => void;
+  onPress: () => void;
 };
 
 const BlueButtons = ({name, onPress}: BlueButtonProps) => {
