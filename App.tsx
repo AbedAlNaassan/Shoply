@@ -10,12 +10,15 @@ import {StatusBar, StyleSheet} from 'react-native';
 import {ThemeProvider, useTheme} from './src/context/ThemeContext';
 // Import the necessary navigation functions
 import RootNavigator from './src/navigation/RootNavigator';
+import {useNotification} from './src/notifications/useNotification';
 
 const AppContent = () => {
   const {isDarkMode} = useTheme();
 
   // Fix: Add <ParamListBase> to NavigationContainerRef generic
   const navigationRef = useRef<NavigationContainerRef<ParamListBase>>(null);
+
+  useNotification();
 
   const linking = {
     prefixes: ['myapp://'],

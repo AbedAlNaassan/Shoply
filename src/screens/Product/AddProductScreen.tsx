@@ -32,6 +32,7 @@ import {darkStyles} from '../../styles/AddProduct.dark';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import axios from 'axios';
+import analytics from '@react-native-firebase/analytics';
 
 const productSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -182,6 +183,8 @@ const AddProductScreen = () => {
     });
 
     try {
+      setLoading(true);
+
       await axios.post(
         'https://backend-practice.eurisko.me/api/products',
         formData,
@@ -192,6 +195,14 @@ const AddProductScreen = () => {
           },
         },
       );
+
+      // Send event to Firebase Analytics
+      await analytics().logEvent('product_added', {
+        product_name: data.name,
+        price: parseFloat(data.price), // assuming price is string from form
+        currency: 'USD', // default, change if needed
+      });
+
       setLoading(false);
       Alert.alert('Success', 'Product added successfully');
     } catch (error) {
