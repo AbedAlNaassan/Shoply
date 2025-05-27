@@ -16,14 +16,14 @@ import {z} from 'zod';
 import axios from 'axios';
 import {Asset, launchImageLibrary} from 'react-native-image-picker';
 import MapView, {Marker, MapPressEvent} from 'react-native-maps';
-import BlueButtons from '../../components/atoms/BlueButtons';
-import {useAuthStore} from '../../zustand/AuthStore';
+import BlueButtons from '../../../components/atoms/BlueButtons';
+import {useAuthStore} from '../../../zustand/AuthStore';
 import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
-import SpinnerScreen from '../../components/organisms/SpinnerScreen';
-import {RootStackParamList} from '../../types/types';
-import {useTheme} from '../../context/ThemeContext';
-import {lightStyles} from '../../styles/EditProduct.light';
-import {darkStyles} from '../../styles/EditProduct.dark';
+import SpinnerScreen from '../../../components/organisms/SpinnerScreen';
+import {RootStackParamList} from '../../../types/types';
+import {useTheme} from '../../../context/ThemeContext';
+import {lightStyles} from '../../../styles/EditProduct.light';
+import {darkStyles} from '../../../styles/EditProduct.dark';
 import {
   PERMISSIONS,
   request,

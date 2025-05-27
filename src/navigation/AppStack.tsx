@@ -1,13 +1,13 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import ProductDetailScreen from '../screens/Product/ProductDetailScreen';
+import ProductDetailScreen from '../screens/Product/ProductDetails/ProductDetailScreen';
 import ProductListScreen from '../screens/Product/ProductListScreen';
 import HomeScreen from '../screens/Home/HomeScreen';
 import Camera from '../components/camera/Camera';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
-import AddProductScreen from '../screens/Product/AddProductScreen';
+import AddProductScreen from '../screens/Product/AddProductScreen/AddProductScreen';
 import {RootStackParamList} from '../types/types';
-import EditProductScreen from '../screens/Product/EditProduct';
+import EditProductScreen from '../screens/Product/EditProduct/EditProduct';
 import SearchScreen from '../screens/Product/SearchScreen';
 import CartScreen from '../screens/Cart/CarScreen';
 

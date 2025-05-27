@@ -91,7 +91,7 @@ const RegisterForm = () => {
     return true;
   };
 
-  const pickImage = async () => {
+  const pickImage = React.useCallback(async () => {
     const hasPermission = await requestGalleryPermission();
     if (!hasPermission) {
       Alert.alert(
@@ -116,60 +116,67 @@ const RegisterForm = () => {
         }
       },
     );
-  };
+  }, []);
 
-  const handleSignup = async (data: RegisterType) => {
-    setLoading(true);
+  const handleSignup = React.useCallback(
+    async (data: RegisterType) => {
+      setLoading(true);
 
-    const formData = new FormData();
-    formData.append('email', data.email);
-    formData.append('password', data.password);
-    formData.append('firstName', data.firstName);
-    formData.append('lastName', data.lastName);
+      const formData = new FormData();
+      formData.append('email', data.email);
+      formData.append('password', data.password);
+      formData.append('firstName', data.firstName);
+      formData.append('lastName', data.lastName);
 
-    if (profileImage) {
-      formData.append('profileImage', {
-        uri: profileImage.uri,
-        type: profileImage.type || 'image/jpeg',
-        name: profileImage.fileName || 'profile.jpg',
-      } as any);
-    }
-
-    const trySignup = async () => {
-      try {
-        const response = await signupUser(formData);
-        setLoading(false);
-        Alert.alert('Success', response.message || 'Registration successful', [
-          {
-            text: 'OK',
-            onPress: () => {
-              setUser({email: data.email});
-              setEmail(data.email);
-              setIsNewUser(true);
-            },
-          },
-        ]);
-      } catch (error: any) {
-        setLoading(false);
-        Alert.alert(
-          'Signup Failed',
-          error?.response?.data?.message || error.message || 'Network error.',
-          [
-            {text: 'Cancel', style: 'cancel'},
-            {
-              text: 'Retry',
-              onPress: () => {
-                setLoading(true);
-                trySignup();
-              },
-            },
-          ],
-        );
+      if (profileImage) {
+        formData.append('profileImage', {
+          uri: profileImage.uri,
+          type: profileImage.type || 'image/jpeg',
+          name: profileImage.fileName || 'profile.jpg',
+        } as any);
       }
-    };
 
-    trySignup();
-  };
+      const trySignup = async () => {
+        try {
+          const response = await signupUser(formData);
+          setLoading(false);
+          Alert.alert(
+            'Success',
+            response.message || 'Registration successful',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  setUser({email: data.email});
+                  setEmail(data.email);
+                  setIsNewUser(true);
+                },
+              },
+            ],
+          );
+        } catch (error: any) {
+          setLoading(false);
+          Alert.alert(
+            'Signup Failed',
+            error?.response?.data?.message || error.message || 'Network error.',
+            [
+              {text: 'Cancel', style: 'cancel'},
+              {
+                text: 'Retry',
+                onPress: () => {
+                  setLoading(true);
+                  trySignup();
+                },
+              },
+            ],
+          );
+        }
+      };
+
+      trySignup();
+    },
+    [profileImage, setUser, setEmail, setIsNewUser],
+  );
 
   return (
     <View style={styles.formContainer}>

@@ -6,7 +6,7 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -40,63 +40,63 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
-    setLoading(true); // Start loading spinner
-    try {
-      const response = await loginApi({
-        email: data.email,
-        password: data.password,
-        token_expires_in: '1y',
-      });
-
-      console.log('Login successful:', response);
-
-      useAuthStore.getState().setUser({email: data.email});
-      useAuthStore.getState().setTokens({
-        accessToken: response.data.accessToken,
-        refreshToken: response.data.refreshToken,
-      });
-      useAuthStore.getState().setIsNewUser(false);
-      useAuthStore.getState().setIsVerified(true);
-      useAuthStore.getState().setEmail(data.email);
-    } catch (error: any) {
-      const errorMessage = error?.error?.message || error?.message;
-
-      console.log('Login Error:', errorMessage);
-
-      if (
-        errorMessage === 'Network Error' ||
-        errorMessage === 'Request failed with status code 500'
-      ) {
-        Alert.alert(
-          'Login Failed',
-          'Unable to connect to the server. Please try again.',
-          [
-            {
-              text: 'Cancel',
-              style: 'cancel',
-            },
-            {
-              text: 'Retry',
-              onPress: () => handleSubmit(onSubmit)(), // Retry the same function
-            },
-          ],
-        );
-      } else if (errorMessage === 'Please verify your email first') {
-        useAuthStore.getState().setUser({email: data.email});
-        useAuthStore.getState().setEmail(data.email);
-        useAuthStore.getState().setIsNewUser(true);
-        useAuthStore.getState().setIsVerified(false);
-      } else {
-        setError('password', {
-          type: 'manual',
-          message: 'Incorrect email or password',
+  const onSubmit = useCallback(
+    async (data: LoginFormData) => {
+      setLoading(true);
+      try {
+        const response = await loginApi({
+          email: data.email,
+          password: data.password,
+          token_expires_in: '1y',
         });
+
+        console.log('Login successful:', response);
+
+        useAuthStore.getState().setUser({email: data.email});
+        useAuthStore.getState().setTokens({
+          accessToken: response.data.accessToken,
+          refreshToken: response.data.refreshToken,
+        });
+        useAuthStore.getState().setIsNewUser(false);
+        useAuthStore.getState().setIsVerified(true);
+        useAuthStore.getState().setEmail(data.email);
+      } catch (error: any) {
+        const errorMessage = error?.error?.message || error?.message;
+
+        console.log('Login Error:', errorMessage);
+
+        if (
+          errorMessage === 'Network Error' ||
+          errorMessage === 'Request failed with status code 500'
+        ) {
+          Alert.alert(
+            'Login Failed',
+            'Unable to connect to the server. Please try again.',
+            [
+              {text: 'Cancel', style: 'cancel'},
+              {
+                text: 'Retry',
+                onPress: () => handleSubmit(onSubmit)(),
+              },
+            ],
+          );
+        } else if (errorMessage === 'Please verify your email first') {
+          useAuthStore.getState().setUser({email: data.email});
+          useAuthStore.getState().setEmail(data.email);
+          useAuthStore.getState().setIsNewUser(true);
+          useAuthStore.getState().setIsVerified(false);
+        } else {
+          setError('password', {
+            type: 'manual',
+            message: 'Incorrect email or password',
+          });
+        }
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      setLoading(false); // Stop loading spinner
-    }
-  };
+    },
+    [setError, handleSubmit],
+  ); // Add other dependencies if needed
 
   return (
     <View style={styles.formContainerStyle}>

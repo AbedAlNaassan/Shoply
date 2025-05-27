@@ -14,7 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../types/types';
 import {useTheme} from '../../context/ThemeContext';
 import BackIcon from '../../assets/back.svg';
-import MyProducts from '../../components/organisms/MyProducts';
+import MyProducts from '../../components/organisms/Myproducts/MyProducts';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'ProductDetails'>;
 
