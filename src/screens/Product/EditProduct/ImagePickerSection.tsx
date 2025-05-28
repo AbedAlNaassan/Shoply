@@ -32,7 +32,12 @@ const ImagePickerSection: React.FC<Props> = ({
           {existingImageUrls
             .filter(url => typeof url === 'string' && url.trim() !== '') // ✅ Valid strings only
             .map((url, idx) => (
-              <Image key={idx} source={{uri: url}} style={styles.image} />
+              <Image
+                key={idx}
+                testID="existing-image"
+                source={{uri: url}}
+                style={styles.image}
+              />
             ))}
         </ScrollView>
       )}
@@ -44,7 +49,12 @@ const ImagePickerSection: React.FC<Props> = ({
           showsHorizontalScrollIndicator={false}
           style={styles.imagesContainer}>
           {images.map((img, idx) => (
-            <Image key={idx} source={{uri: img.uri}} style={styles.image} />
+            <Image
+              key={idx}
+              testID="picked-image"
+              source={{uri: img.uri}}
+              style={styles.image}
+            />
           ))}
         </ScrollView>
       )}
