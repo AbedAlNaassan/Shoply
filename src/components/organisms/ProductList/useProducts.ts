@@ -1,4 +1,3 @@
-// hooks/useProducts.ts
 import {useCallback, useState, useRef} from 'react';
 import {Alert} from 'react-native';
 import {fetchProducts} from '../../../api/GetProducts';

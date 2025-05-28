@@ -96,7 +96,7 @@ const LoginForm = () => {
       }
     },
     [setError, handleSubmit],
-  ); // Add other dependencies if needed
+  );
 
   return (
     <View style={styles.formContainerStyle}>

@@ -21,14 +21,14 @@ const BlueButtons = ({name, onPress}: BlueButtonProps) => {
 
 export default BlueButtons;
 
-// custom blue buttons in login and singUp pages
+// custom blue buttons
 
 const styles = StyleSheet.create({
   button: {
     width: 240,
     padding: 15,
     marginTop: 10,
-    backgroundColor: '#3A59D1', // Green background
+    backgroundColor: '#3A59D1',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',

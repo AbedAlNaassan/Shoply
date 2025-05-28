@@ -1,4 +1,3 @@
-// ProductList/ProductListFooter.tsx
 import React from 'react';
 import {View, Button, ActivityIndicator} from 'react-native';
 import PropTypes from 'prop-types';

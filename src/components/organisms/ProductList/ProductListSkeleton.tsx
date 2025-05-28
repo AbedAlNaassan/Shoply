@@ -1,4 +1,3 @@
-// ProductList/ProductListSkeleton.tsx
 import React from 'react';
 import {FlatList} from 'react-native';
 import {styles} from './styles';

@@ -43,7 +43,7 @@ export const updateUserProfile = async ({
         uri: imageUri,
         name: fileName,
         type: `image/${fileType}`,
-      } as any); // You can use `as any` to avoid type errors with RN `File`
+      } as any);
     }
 
     const response: AxiosResponse<UpdateProfileResponse> = await axios.put(

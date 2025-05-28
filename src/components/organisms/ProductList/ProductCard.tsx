@@ -1,4 +1,3 @@
-// ProductList/ProductCard.tsx
 import React from 'react';
 import {Pressable, View, Text, Image} from 'react-native';
 import {styles} from './styles';

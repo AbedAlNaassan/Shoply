@@ -1,25 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Image,
-  TouchableOpacity,
-  Alert,
-  Platform,
-  ScrollView,
-} from 'react-native';
+import {View, Text, ScrollView, Alert, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Controller, useForm} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import axios from 'axios';
 import {Asset, launchImageLibrary} from 'react-native-image-picker';
-import MapView, {Marker, MapPressEvent} from 'react-native-maps';
-import BlueButtons from '../../../components/atoms/BlueButtons';
+import {MapPressEvent} from 'react-native-maps';
 import {useAuthStore} from '../../../zustand/AuthStore';
 import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
-import SpinnerScreen from '../../../components/organisms/SpinnerScreen';
 import {RootStackParamList} from '../../../types/types';
 import {useTheme} from '../../../context/ThemeContext';
 import {lightStyles} from '../../../styles/EditProduct.light';
@@ -31,6 +20,13 @@ import {
   RESULTS,
   openSettings,
 } from 'react-native-permissions';
+
+import BlueButtons from '../../../components/atoms/BlueButtons';
+import SpinnerScreen from '../../../components/organisms/SpinnerScreen';
+
+import ProductFormFields from './ProductFormFields';
+import ImagePickerSection from './ImagePickerSection';
+import MapSection from './MapSection';
 
 const productSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -54,7 +50,6 @@ const EditProductScreen = () => {
   const styles = theme === 'dark' ? darkStyles : lightStyles;
   const accessToken = useAuthStore(state => state.accessToken);
 
-  // Local state
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState<Asset[]>([]);
   const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
@@ -79,7 +74,6 @@ const EditProductScreen = () => {
     },
   });
 
-  // Fetch product data on component mount
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
@@ -104,6 +98,8 @@ const EditProductScreen = () => {
           price: product.price ? String(product.price) : '',
           location: loc,
         });
+
+        setExistingImageUrls(product.images ?? []);
       } catch (error) {
         Alert.alert(
           'Error',
@@ -152,7 +148,6 @@ const EditProductScreen = () => {
     return false;
   };
 
-  // Handle picking images from gallery
   const handlePickImage = async () => {
     const hasPermission = await requestGalleryPermission();
     if (!hasPermission) return;
@@ -160,12 +155,11 @@ const EditProductScreen = () => {
     launchImageLibrary({mediaType: 'photo', selectionLimit: 5}, response => {
       if (response.assets) {
         setImages(response.assets);
-        setExistingImageUrls([]); // Clear existing images when replaced
+        setExistingImageUrls([]); // clear old images on new pick
       }
     });
   };
 
-  // Handle map press to update marker location
   const handleMapPress = (event: MapPressEvent) => {
     const {latitude, longitude} = event.nativeEvent.coordinate;
     setMarker({
@@ -175,7 +169,6 @@ const EditProductScreen = () => {
     });
   };
 
-  // Submit updated product data
   const submitProduct = async (data: ProductForm) => {
     setLoading(true);
 
@@ -226,116 +219,24 @@ const EditProductScreen = () => {
         </View>
 
         <View style={styles.main}>
-          {/* Product Name */}
-          <Controller
-            name="name"
+          <ProductFormFields
             control={control}
-            render={({field: {onChange, value}}) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Product Name"
-                placeholderTextColor="gray"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
+            errors={errors}
+            styles={styles}
           />
-          {errors.name && (
-            <Text style={styles.error}>{errors.name.message}</Text>
-          )}
 
-          {/* Description */}
-          <Controller
-            name="description"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Description"
-                placeholderTextColor="gray"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
+          <ImagePickerSection
+            images={images}
+            existingImageUrls={existingImageUrls}
+            onPickImage={handlePickImage}
+            styles={styles}
           />
-          {errors.description && (
-            <Text style={styles.error}>{errors.description.message}</Text>
-          )}
 
-          {/* Price */}
-          <Controller
-            name="price"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Price"
-                placeholderTextColor="gray"
-                onChangeText={onChange}
-                value={value}
-                keyboardType="numeric"
-              />
-            )}
+          <MapSection
+            marker={marker}
+            onMapPress={handleMapPress}
+            styles={styles}
           />
-          {errors.price && (
-            <Text style={styles.error}>{errors.price.message}</Text>
-          )}
-
-          {/* Image Picker */}
-          <View style={styles.imagePickerButtons}>
-            <TouchableOpacity onPress={handlePickImage}>
-              <Text style={styles.link}>Pick from Gallery</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Existing Images */}
-          {existingImageUrls.length > 0 && (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={styles.imagesContainer}>
-              {existingImageUrls.map((url, idx) => (
-                <Image key={idx} source={{uri: url}} style={styles.image} />
-              ))}
-            </ScrollView>
-          )}
-
-          {/* Newly Picked Images */}
-          {images.length > 0 && (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={styles.imagesContainer}>
-              {images.map((img, idx) => (
-                <Image key={idx} source={{uri: img.uri}} style={styles.image} />
-              ))}
-            </ScrollView>
-          )}
-
-          {/* Map View */}
-          <View style={styles.mapContainer}>
-            <MapView
-              style={styles.map}
-              initialRegion={{
-                latitude: marker.latitude,
-                longitude: marker.longitude,
-                latitudeDelta: 0.02,
-                longitudeDelta: 0.02,
-              }}
-              onPress={handleMapPress}
-              showsUserLocation
-              zoomEnabled
-              zoomControlEnabled
-              loadingEnabled>
-              <Marker
-                coordinate={{
-                  latitude: marker.latitude,
-                  longitude: marker.longitude,
-                }}
-                title={marker.name}
-              />
-            </MapView>
-          </View>
 
           <BlueButtons
             name="Update Product"

@@ -1,12 +1,12 @@
 import React, {useRef, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, Alert} from 'react-native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   Camera,
   useCameraDevice,
   useCameraPermission,
 } from 'react-native-vision-camera';
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {RootStackParamList} from '../../types/types';
 
 type CameraRouteProp = RouteProp<RootStackParamList, 'Camera'>;
@@ -34,8 +34,6 @@ const Cameras = () => {
         Alert.alert('Error', 'Failed to capture photo');
         return;
       }
-
-      console.log('Photo path:', photo.path);
 
       if (onPhotoTaken) {
         onPhotoTaken('file://' + photo.path);

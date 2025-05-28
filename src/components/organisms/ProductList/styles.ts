@@ -1,4 +1,3 @@
-// ProductList/styles.ts
 import {Dimensions, PixelRatio, StyleSheet, Platform} from 'react-native';
 
 const width = Dimensions.get('screen').width;
@@ -12,7 +11,7 @@ export const styles = StyleSheet.create({
     paddingBottom: Platform.select({ios: 80, android: 60}),
   },
   infoContainer: {
-    width: width / 2.2, // Slightly less than half for better spacing
+    width: width / 2.2,
     height: 180,
     alignItems: 'center',
     justifyContent: 'center',
@@ -100,5 +99,10 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     color: '#888',
     textAlign: 'center',
+  },
+  loadingContainer: {
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

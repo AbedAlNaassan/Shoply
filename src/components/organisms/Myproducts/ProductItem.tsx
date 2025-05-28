@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Product, RootStackParamList} from '../../../types/types';
+import {Products, RootStackParamList} from '../../../types/types';
 import axios from 'axios';
 import {useAuthStore} from '../../../zustand/AuthStore';
 
@@ -22,7 +22,7 @@ const API_URL = 'https://backend-practice.eurisko.me';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'ProductDetails'>;
 
-const ProductItem = ({item}: {item: Product}) => {
+const ProductItem = ({item}: {item: Products}) => {
   const navigation = useNavigation<NavigationProp>();
   const accessToken = useAuthStore(state => state.accessToken);
 

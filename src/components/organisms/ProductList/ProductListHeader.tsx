@@ -1,4 +1,3 @@
-// ProductList/ProductListHeader.tsx
 import React from 'react';
 import {View, Button} from 'react-native';
 import {styles} from './styles';

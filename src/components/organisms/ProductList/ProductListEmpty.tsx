@@ -1,25 +1,67 @@
-// ProductList/ProductListEmpty.tsx
 import React from 'react';
-import {View, Text} from 'react-native';
-import PropTypes from 'prop-types';
+import {View, Button, ActivityIndicator} from 'react-native';
 import {styles} from './styles';
 
-interface ProductListEmptyProps {
-  message?: string;
+interface ProductListFooterProps {
+  loading: boolean;
+  hasNextPage: boolean;
+  productsLength: number;
+  onLoadMore: () => void;
 }
 
-const ProductListEmpty: React.FC<ProductListEmptyProps> = React.memo(
-  ({message = 'No products found.'}) => {
-    return (
-      <View style={styles.emptyContainer} testID="product-list-empty">
-        <Text style={styles.emptyText}>{message}</Text>
-      </View>
-    );
-  },
-);
+const withErrorBoundary = <P extends object>(
+  WrappedComponent: React.ComponentType<P>,
+): React.ComponentType<P> => {
+  return class ErrorBoundary extends React.Component<P, {hasError: boolean}> {
+    state = {hasError: false};
 
-ProductListEmpty.propTypes = {
-  message: PropTypes.string,
+    static getDerivedStateFromError() {
+      return {hasError: true};
+    }
+
+    componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+      console.error('Error caught by boundary:', error, errorInfo);
+    }
+
+    render() {
+      if (this.state.hasError) {
+        return null;
+      }
+
+      return <WrappedComponent {...this.props} />;
+    }
+  };
 };
 
-export default ProductListEmpty;
+const ProductListFooter: React.FC<ProductListFooterProps> = ({
+  loading,
+  hasNextPage,
+  productsLength,
+  onLoadMore,
+}) => {
+  if (loading) {
+    return (
+      <ActivityIndicator
+        size="large"
+        color="#0000ff"
+        testID="loading-indicator"
+      />
+    );
+  }
+
+  if (hasNextPage && productsLength > 0) {
+    return (
+      <View style={styles.loadMoreButton}>
+        <Button
+          title="Load More"
+          onPress={onLoadMore}
+          testID="load-more-button"
+        />
+      </View>
+    );
+  }
+
+  return null;
+};
+
+export default withErrorBoundary(ProductListFooter);

@@ -21,7 +21,6 @@ interface Styles {
   safearea: object;
   errorContainer: object;
   error: object;
-  // Add other style properties used in your components
 }
 
 const ProductDetailScreen = () => {

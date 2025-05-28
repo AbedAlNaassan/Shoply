@@ -11,7 +11,7 @@ export const fetchProducts = async (
 ) => {
   const response = await axios.get(API_URL, {
     headers: {
-      Authorization: `Bearer ${token}`, // if required
+      Authorization: `Bearer ${token}`,
     },
     params: {
       page,
