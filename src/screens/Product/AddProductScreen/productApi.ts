@@ -38,6 +38,13 @@ export const submitProduct = async (data: ProductForm, images: AssetType[]) => {
       currency: 'USD',
     });
 
+    // Trigger Firebase Cloud Function to notify users
+    try {
+      await axios.get('https://notifynewproduct-7mzrpjj6bq-uc.a.run.app');
+    } catch (notifyError) {
+      console.error('Failed to send new product notification:', notifyError);
+    }
+
     return {success: true, data: response.data};
   } catch (error) {
     console.error('Product submission error:', error);

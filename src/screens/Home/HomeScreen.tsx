@@ -13,6 +13,8 @@ import LogoutIcon from '../../assets/Logout.svg';
 import {darkStyles} from '../../styles/Home.dark';
 import Profile from '../../assets/profile.svg';
 import Moon from '../../assets/moon.svg';
+import {useNotification} from '../../notifications/useNotification';
+import {useMessagingListener} from '../../notifications/useMessagingListener';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 const HomeScreen = () => {
@@ -33,6 +35,9 @@ const HomeScreen = () => {
   const onSearch = () => {
     navigation.navigate('Search');
   };
+
+  useNotification();
+  useMessagingListener();
 
   return (
     <SafeAreaView style={styles.container}>
