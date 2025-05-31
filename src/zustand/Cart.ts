@@ -1,4 +1,3 @@
-// store/cartStore.ts
 import {create} from 'zustand';
 
 interface CartItem {

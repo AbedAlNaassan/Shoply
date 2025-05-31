@@ -30,7 +30,7 @@ const height = Dimensions.get('screen').height;
 const LoginForm = () => {
   const navigation = useNavigation<NavigationProp>();
   const [loading, setLoading] = useState(false);
-
+  const store = useAuthStore.getState();
   const {
     control,
     handleSubmit,
@@ -52,14 +52,14 @@ const LoginForm = () => {
 
         console.log('Login successful:', response);
 
-        useAuthStore.getState().setUser({email: data.email});
-        useAuthStore.getState().setTokens({
+        store.setUser({email: data.email});
+        store.setTokens({
           accessToken: response.data.accessToken,
           refreshToken: response.data.refreshToken,
         });
-        useAuthStore.getState().setIsNewUser(false);
-        useAuthStore.getState().setIsVerified(true);
-        useAuthStore.getState().setEmail(data.email);
+        store.setIsNewUser(false);
+        store.setIsVerified(true);
+        store.setEmail(data.email);
       } catch (error: any) {
         const errorMessage = error?.error?.message || error?.message;
 
@@ -81,10 +81,10 @@ const LoginForm = () => {
             ],
           );
         } else if (errorMessage === 'Please verify your email first') {
-          useAuthStore.getState().setUser({email: data.email});
-          useAuthStore.getState().setEmail(data.email);
-          useAuthStore.getState().setIsNewUser(true);
-          useAuthStore.getState().setIsVerified(false);
+          store.setUser({email: data.email});
+          store.setEmail(data.email);
+          store.setIsNewUser(true);
+          store.setIsVerified(false);
         } else {
           setError('password', {
             type: 'manual',
@@ -95,7 +95,7 @@ const LoginForm = () => {
         setLoading(false);
       }
     },
-    [setError, handleSubmit],
+    [setError, handleSubmit, store],
   );
 
   return (

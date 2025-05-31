@@ -9,12 +9,12 @@ import {
 } from 'react-native';
 import React, {useRef} from 'react';
 import {Controller, useForm} from 'react-hook-form';
+import {useAuthStore} from '../../zustand/AuthStore';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {z} from 'zod';
 import BlueButtons from '../atoms/BlueButtons';
 import {verifyOtp} from '../../api/auth';
-import {useAuthStore} from '../../zustand/AuthStore';
 import SpinnerScreen from './SpinnerScreen';
+import {z} from 'zod';
 
 const {width, height} = Dimensions.get('window');
 const pixel = PixelRatio.getFontScale();

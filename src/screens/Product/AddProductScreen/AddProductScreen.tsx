@@ -4,13 +4,14 @@ import {useTheme} from '../../../context/ThemeContext';
 import {lightStyles} from '../../../styles/AddProduct.light';
 import {darkStyles} from '../../../styles/AddProduct.dark';
 import SpinnerScreen from '../../../components/organisms/SpinnerScreen';
+import {MarkerType, AssetType, ProductForm} from './productTypes';
 import BlueButtons from '../../../components/atoms/BlueButtons';
 import {useProductForm} from './useProductForm';
 import {ImagePickerSection} from './ImagePickerSection';
 import {LocationPicker} from './LocationPicker';
 import {ProductFormFields} from './ProductFormFields';
 import {submitProduct} from './productApi';
-import {MarkerType, AssetType, ProductForm} from './productTypes';
+
 import {MapPressEvent} from 'react-native-maps';
 
 const initialMarker: MarkerType = {

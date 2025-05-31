@@ -2,6 +2,8 @@ import {View, Text, Image, Pressable} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useNotification} from '../../notifications/useNotification';
+import {useMessagingListener} from '../../notifications/useMessagingListener';
 import ProductList from '../../components/organisms/ProductList/ProductList';
 import BlueButtons from '../../components/atoms/BlueButtons';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -13,8 +15,6 @@ import LogoutIcon from '../../assets/Logout.svg';
 import {darkStyles} from '../../styles/Home.dark';
 import Profile from '../../assets/profile.svg';
 import Moon from '../../assets/moon.svg';
-import {useNotification} from '../../notifications/useNotification';
-import {useMessagingListener} from '../../notifications/useMessagingListener';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 const HomeScreen = () => {

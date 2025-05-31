@@ -1,5 +1,5 @@
-import {refreshTokenApi} from '../api/auth'; // or wherever your function lives
-import {useAuthStore} from '../zustand/AuthStore'; // adjust path if needed
+import {refreshTokenApi} from '../api/auth';
+import {useAuthStore} from '../zustand/AuthStore';
 
 export const refreshAccessToken = async () => {
   const refreshToken = useAuthStore.getState().refreshToken;
@@ -20,7 +20,7 @@ export const refreshAccessToken = async () => {
 
     return accessToken;
   } catch (err) {
-    useAuthStore.getState().logout(); // optional fallback
+    useAuthStore.getState().logout();
     throw err;
   }
 };

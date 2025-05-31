@@ -48,6 +48,4 @@ export const useAuthStore = create<AuthStore>(set => ({
       isVerified: false,
       email: '',
     }),
-
-  // no longer needed, but kept as no-op for interface consistency
 }));

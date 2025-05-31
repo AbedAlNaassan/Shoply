@@ -1,4 +1,3 @@
-// ProductList/types.ts
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../types/types';
 

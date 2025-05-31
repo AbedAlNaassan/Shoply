@@ -1,16 +1,16 @@
 import React, {useState, useCallback} from 'react';
 import {View, FlatList, Text} from 'react-native';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {useProducts} from './useProducts';
-import ProductCard from './ProductCard';
+import ProductListErrorBoundary from './ProductListErrorBoundary';
+import {useAuthStore} from '../../../zustand/AuthStore';
 import ProductListSkeleton from './ProductListSkeleton';
 import ProductListEmpty from './ProductListEmpty';
 import ProductListFooter from './ProductListFooter';
 import ProductListHeader from './ProductListHeader';
-import {styles} from './styles';
 import {ProductListProps, SortOrder} from './types';
-import ProductListErrorBoundary from './ProductListErrorBoundary';
-import {useAuthStore} from '../../../zustand/AuthStore';
+import {useProducts} from './useProducts';
+import ProductCard from './ProductCard';
+import {styles} from './styles';
 
 const ProductList: React.FC<ProductListProps> = ({scrollEnabled = true}) => {
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');

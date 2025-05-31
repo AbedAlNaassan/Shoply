@@ -1,18 +1,3 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, ScrollView, Alert, Platform} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {useForm} from 'react-hook-form';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {z} from 'zod';
-import axios from 'axios';
-import {Asset, launchImageLibrary} from 'react-native-image-picker';
-import {MapPressEvent} from 'react-native-maps';
-import {useAuthStore} from '../../../zustand/AuthStore';
-import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
-import {RootStackParamList} from '../../../types/types';
-import {useTheme} from '../../../context/ThemeContext';
-import {lightStyles} from '../../../styles/EditProduct.light';
-import {darkStyles} from '../../../styles/EditProduct.dark';
 import {
   PERMISSIONS,
   request,
@@ -20,13 +5,26 @@ import {
   RESULTS,
   openSettings,
 } from 'react-native-permissions';
-
+import React, {useEffect, useState} from 'react';
+import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
+import {View, Text, ScrollView, Alert, Platform} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {useForm} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {Asset, launchImageLibrary} from 'react-native-image-picker';
+import {useAuthStore} from '../../../zustand/AuthStore';
+import {RootStackParamList} from '../../../types/types';
+import {MapPressEvent} from 'react-native-maps';
+import {useTheme} from '../../../context/ThemeContext';
+import {lightStyles} from '../../../styles/EditProduct.light';
+import {darkStyles} from '../../../styles/EditProduct.dark';
 import BlueButtons from '../../../components/atoms/BlueButtons';
 import SpinnerScreen from '../../../components/organisms/SpinnerScreen';
-
 import ProductFormFields from './ProductFormFields';
 import ImagePickerSection from './ImagePickerSection';
 import MapSection from './MapSection';
+import {z} from 'zod';
+import axios from 'axios';
 
 const productSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -49,7 +47,6 @@ const EditProductScreen = () => {
   const {theme} = useTheme();
   const styles = theme === 'dark' ? darkStyles : lightStyles;
   const accessToken = useAuthStore(state => state.accessToken);
-
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState<Asset[]>([]);
   const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
