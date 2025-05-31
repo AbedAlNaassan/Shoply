@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   NavigationContainer,
   NavigationContainerRef,
@@ -9,6 +9,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {StatusBar, StyleSheet} from 'react-native';
 import {ThemeProvider, useTheme} from './src/context/ThemeContext';
 import RootNavigator from './src/navigation/RootNavigator';
+import BootSplash from 'react-native-bootsplash';
 
 const AppContent = () => {
   const {isDarkMode} = useTheme();
@@ -29,6 +30,17 @@ const AppContent = () => {
       },
     },
   };
+
+  useEffect(() => {
+    const init = async () => {
+      // …do multiple sync or async tasks
+    };
+
+    init().finally(async () => {
+      await BootSplash.hide({fade: true});
+      console.log('BootSplash has been hidden successfully');
+    });
+  }, []);
 
   return (
     <>
