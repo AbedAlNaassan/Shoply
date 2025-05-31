@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Button, ActivityIndicator} from 'react-native';
-import PropTypes from 'prop-types';
 import {styles} from './styles';
 
 interface ProductListFooterProps {
@@ -56,13 +55,6 @@ const ProductListFooter: React.FC<ProductListFooterProps> = ({
   }
 
   return null;
-};
-
-ProductListFooter.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  hasNextPage: PropTypes.bool.isRequired,
-  productsLength: PropTypes.number.isRequired,
-  onLoadMore: PropTypes.func.isRequired,
 };
 
 export default withErrorBoundary(ProductListFooter);
