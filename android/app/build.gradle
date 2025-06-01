@@ -9,6 +9,7 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -124,6 +125,7 @@ dependencies {
     implementation("com.facebook.react:react-android")
 
  implementation "androidx.core:core-splashscreen:1.0.0-beta01" 
+ implementation 'com.google.firebase:firebase-crashlytics'
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {

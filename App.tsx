@@ -10,7 +10,7 @@ import {StatusBar, StyleSheet} from 'react-native';
 import {ThemeProvider, useTheme} from './src/context/ThemeContext';
 import RootNavigator from './src/navigation/RootNavigator';
 import BootSplash from 'react-native-bootsplash';
-
+import RNBootSplash from 'react-native-bootsplash';
 const AppContent = () => {
   const {isDarkMode} = useTheme();
 
@@ -46,7 +46,10 @@ const AppContent = () => {
     <>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       {/* Pass navigationRef to NavigationContainer and RootNavigator */}
-      <NavigationContainer ref={navigationRef} linking={linking}>
+      <NavigationContainer
+        onReady={() => RNBootSplash.hide()}
+        ref={navigationRef}
+        linking={linking}>
         <RootNavigator navigationRef={navigationRef} />
       </NavigationContainer>
     </>

@@ -23,7 +23,7 @@ export const darkStyles = StyleSheet.create({
     color: '#3A59D1',
   },
   icon: {
-    width: '30%',
+    width: '35%',
     height: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',

@@ -15,6 +15,7 @@ export type RootStackParamList = {
   EditProduct: {id: string};
   Search: undefined;
   Cart: undefined;
+  Crash: undefined;
 };
 
 export type RefreshTokenRequest = {
