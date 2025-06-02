@@ -10,6 +10,7 @@ import {RootStackParamList} from '../types/types';
 import EditProductScreen from '../screens/Product/EditProduct/EditProduct';
 import SearchScreen from '../screens/Product/SearchScreen';
 import CartScreen from '../screens/Cart/CarScreen';
+import CrashScreen from '../screens/Crash/CrashScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -29,6 +30,7 @@ export default function AppStack() {
       <Stack.Screen name="EditProduct" component={EditProductScreen} />
       <Stack.Screen name="Search" component={SearchScreen} />
       <Stack.Screen name="Cart" component={CartScreen} />
+      <Stack.Screen name="Crash" component={CrashScreen} />
     </Stack.Navigator>
   );
 }

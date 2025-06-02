@@ -36,6 +36,10 @@ const HomeScreen = () => {
     navigation.navigate('Search');
   };
 
+  const handleCrash = () => {
+    navigation.navigate('Crash');
+  };
+
   useNotification();
   useMessagingListener();
 
@@ -45,6 +49,9 @@ const HomeScreen = () => {
         <View style={styles.header}>
           <Text style={styles.shoply}>Shoply</Text>
           <View style={styles.icon}>
+            <Pressable>
+              <Profile width={30} height={30} onPress={handleCrash} />
+            </Pressable>
             <Pressable>
               <Profile width={30} height={30} onPress={handleProfile} />
             </Pressable>
