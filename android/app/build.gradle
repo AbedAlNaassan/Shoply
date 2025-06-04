@@ -1,15 +1,15 @@
-import java.util.Properties
-
-def dotenv = new Properties()
-file("$rootDir/.env").withInputStream { stream ->
-    dotenv.load(stream)
-}
-
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
+
+
+project.ext.envConfigFiles = [
+    debug: ".env",
+    release: ".env.production",
+    staging: ".env.staging", // Add custom variant if needed
+]
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -94,9 +94,10 @@ android {
         versionCode 1
         versionName "1.0"
         missingDimensionStrategy 'react-native-camera', 'general'
-        manifestPlaceholders = [
-    googleMapsKey: dotenv['GOOGLE_MAPS_API_KEY'] ?: "",
+     manifestPlaceholders = [
+    googleMapsKey: System.getenv("GOOGLE_MAPS_API_KEY") ?: ""
 ]
+
     }
     signingConfigs {
         debug {
@@ -125,6 +126,8 @@ android {
         }
     }
 }
+
+apply from: project(":react-native-config").projectDir.getPath() + "/dotenv.gradle"
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
