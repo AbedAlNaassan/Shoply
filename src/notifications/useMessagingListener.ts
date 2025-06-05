@@ -13,7 +13,7 @@ export const useMessagingListener = () => {
           remoteMessage.notification?.title ?? 'Notification',
           remoteMessage.notification?.body ?? 'You have a new message',
         );
-      }, 9000); // delay by 5 seconds
+      }, 2000); // delay by 5 seconds
     });
 
     // When app is opened from a background state (notification tap)

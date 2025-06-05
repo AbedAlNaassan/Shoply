@@ -40,7 +40,9 @@ export const submitProduct = async (data: ProductForm, images: AssetType[]) => {
 
     // Trigger Firebase Cloud Function to notify users
     try {
+      console.log('Calling notification function...');
       await axios.get('https://notifynewproduct-7mzrpjj6bq-uc.a.run.app');
+      console.log('Notification function call completed.');
     } catch (notifyError) {
       console.error('Failed to send new product notification:', notifyError);
     }

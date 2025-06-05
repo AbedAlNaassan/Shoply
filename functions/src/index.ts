@@ -21,6 +21,8 @@ admin.initializeApp();
 
 export const notifyNewProduct = functions.https.onRequest(async (req, res) => {
   try {
+    console.log('Notification function called');
+
     const snapshot = await admin.firestore().collection('fcmTokens').get();
 
     const tokens: string[] = [];
@@ -31,15 +33,14 @@ export const notifyNewProduct = functions.https.onRequest(async (req, res) => {
       }
     });
 
+    console.log('Number of tokens:', tokens.length);
+
     if (tokens.length === 0) {
       res.status(200).send('No tokens to send notifications to.');
       return;
     }
 
-    // Send to only the first token
-    const token = tokens[0];
-
-    const message = {
+    const messagePayload = {
       notification: {
         title: 'New Product Added!',
         body: 'Check out the latest item now!',
@@ -56,16 +57,22 @@ export const notifyNewProduct = functions.https.onRequest(async (req, res) => {
           },
         },
       },
-      token: token,
     };
 
-    console.log('Sending to token:', token);
-    await admin.messaging().send(message);
+    let successCount = 0;
+    for (const token of tokens) {
+      try {
+        await admin.messaging().send({...messagePayload, token});
+        console.log(`Notification sent to: ${token}`);
+        successCount++;
+      } catch (error) {
+        console.error(`Failed to send to ${token}`, error);
+      }
+    }
 
-    console.log(`Notification sent successfully to token: ${token}`);
-    res.status(200).send('Notification sent!');
+    res.status(200).send(`Notifications sent to ${successCount} devices.`);
   } catch (error) {
-    console.error('Error sending notification:', error);
-    res.status(500).send('Error sending notification');
+    console.error('Error sending notifications:', error);
+    res.status(500).send('Error sending notifications');
   }
 });
