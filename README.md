@@ -8,58 +8,58 @@ This project is a feature-rich e-commerce mobile application built with **React 
 
 ## 🚀 Features
 
-### ✅ Authentication
+### ✅ Authentication & Security
 
 - **Signup, Login, OTP Verification, Logout** using an API
 - **Session persistence** with refresh token support
 - Form validation using **react-hook-form** and **Zod**
-- State management using **Zustand**
+- Secure authentication and sensitive data storage
+- Environment variables for different stages (dev, staging, prod)
 
-### 🧑‍💼 User Profile
+### � Advanced UI/UX
 
-- Tab navigation includes a **Profile tab**
-- Profile edit screen with:
-  - Editable name field
-  - Image picker (Camera and Library access)
+- **Skeleton loading** for product lists
+- **Animations** for screen transitions and photo interactions
+- Custom splash screen and app icon (branding)
+- Dark mode support via Context API
+- Responsive design using `Dimensions` and `PixelRatio`
 
-### 🛍️ Product Management
+### 🛒 Cart Management
 
-- Add new product with:
+- Add/remove products with quantity adjustment
+- Dedicated shopping cart screen
+- Swipe-to-delete functionality
+- Local storage for cart persistence
 
-  - Name, description, price, images, location (select via map with search)
-  - API integration and form validation
+### 🔗 Deep Linking & Sharing
 
-- Edit/Delete product:
-  - Edit and delete options for the product owner
-  - Full edit form for name, description, price, images, and location
+- Share products via native share modal
+- Deep links that open app directly to specific products
+- Push notifications with product links
+- Notification handling to open product details
 
-### 📄 Product Listings
+### 📄 Product Management
 
 - Fetch product list from API with pagination
 - Pull-to-refresh functionality
-- Search products by name
-- Sort products by price
+- Search and sort products
+- Add/edit/delete products with:
+  - Name, description, price, images
+  - Location selection via map
+  - API integration and validation
 
-### 🧾 Product Details
+### 📊 Performance Optimization
 
-- Fetch detailed product data by ID via API
-- Features:
-  - Image swiper
-  - Long press on images to save to device
-  - Map view to show product location
-  - Owner contact info with email functionality
+- **useMemo** and **useCallback** for optimized rendering
+- Performance profiling tools integration
+- **Firebase Crashlytics** for real-time crash monitoring
+- Unit testing with Jest for key components
 
-### 🧭 Navigation
+### 🚀 Deployment
 
-- Stack and Tab navigation using **React Navigation**
-- Screen parameters and data passing supported
-
-### 🎨 UI & Styling
-
-- Custom fonts
-- Responsive design using `Dimensions` and `PixelRatio`
-- Dark mode support via Context API
-- Styled using `StyleSheet` API
+- APK generation for Android
+- CI/CD setup for automated releases
+- App submission process documentation for App Store/Google Play
 
 ---
 
@@ -68,9 +68,10 @@ This project is a feature-rich e-commerce mobile application built with **React 
 - **React Native CLI**
 - **Axios** for API integration
 - **Zustand** for state management
-- **React Navigation**
+- **React Navigation** (Stack + Tab)
 - **react-hook-form** + **Zod** for form validation
-- Native modules: Camera, Location, Storage
+- **Firebase** (Crashlytics, Push Notifications)
+- Native modules: Camera, Location, Storage, Deep Linking
 
 ---
 
@@ -85,15 +86,8 @@ This project is a feature-rich e-commerce mobile application built with **React 
 /assets
 /styles
 /types
+/tests # Jest unit tests
 App.tsx
-
----
-
-📌 Notes
-
--All APIs include loading and error state handling
--Fully responsive and optimized for mobile screens
--Designed with maintainable and modular architecture
 
 ---
 
@@ -104,7 +98,25 @@ git clone <repo-url>
 cd your-project-folder
 npm install
 npx react-native run-android # or run-ios
-```
+
+🧪 Testing
+npm test     # Run Jest unit tests
+
+🏗️ Building
+cd android && ./gradlew assembleRelease  # Generate APK
+
+📌 Notes
+
+All APIs include loading and error state handling
+
+Fully responsive and optimized for mobile screens
+
+Designed with maintainable and modular architecture
+
+CI/CD pipeline configured for automated deployments
+
+Comprehensive crash reporting via Firebase Crashlytics
 
 👨‍💻 Author
 Abed El Rahman Al Naassan
+```
