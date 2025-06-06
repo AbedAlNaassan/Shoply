@@ -1,9 +1,19 @@
 import axios from 'axios';
-import analytics from '@react-native-firebase/analytics';
+import {getAnalytics, logEvent} from '@react-native-firebase/analytics';
+import {getApp} from '@react-native-firebase/app';
 import {ProductForm, AssetType} from './productTypes';
 import {useAuthStore} from '../../../zustand/AuthStore';
+import {API_URL} from '../../../api/constants';
+import {RootStackParamList} from '../../../types/types';
+import {StackNavigationProp} from '@react-navigation/stack';
 
-export const submitProduct = async (data: ProductForm, images: AssetType[]) => {
+type NavigationProp = StackNavigationProp<RootStackParamList, 'ProductList'>;
+
+export const submitProduct = async (
+  data: ProductForm,
+  images: AssetType[],
+  navigation: NavigationProp,
+) => {
   const accessToken = useAuthStore.getState().accessToken;
   const formData = new FormData();
 
@@ -21,18 +31,15 @@ export const submitProduct = async (data: ProductForm, images: AssetType[]) => {
   });
 
   try {
-    const response = await axios.post(
-      'https://backend-practice.eurisko.me/api/products',
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${accessToken}`,
-        },
+    const response = await axios.post(`${API_URL}/api/products`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${accessToken}`,
       },
-    );
+    });
 
-    await analytics().logEvent('product_added', {
+    const analytics = getAnalytics(getApp());
+    await logEvent(analytics, 'product_added', {
       product_name: data.name,
       price: parseFloat(data.price),
       currency: 'USD',
@@ -41,7 +48,12 @@ export const submitProduct = async (data: ProductForm, images: AssetType[]) => {
     // Trigger Firebase Cloud Function to notify users
     try {
       console.log('Calling notification function...');
+
       await axios.get('https://notifynewproduct-7mzrpjj6bq-uc.a.run.app');
+      navigation.navigate({
+        name: 'ProductList',
+        params: {screen: 'ProductList'},
+      });
       console.log('Notification function call completed.');
     } catch (notifyError) {
       console.error('Failed to send new product notification:', notifyError);

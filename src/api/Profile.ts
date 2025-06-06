@@ -1,4 +1,5 @@
 import axios, {AxiosResponse} from 'axios';
+import {API_URL} from './constants';
 
 type UpdateProfileResponse = {
   success: boolean;
@@ -47,7 +48,7 @@ export const updateUserProfile = async ({
     }
 
     const response: AxiosResponse<UpdateProfileResponse> = await axios.put(
-      'https://backend-practice.eurisko.me/user/profile',
+      API_URL,
       formData,
       {
         headers: {

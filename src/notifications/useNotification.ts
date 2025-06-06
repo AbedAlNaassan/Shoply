@@ -1,10 +1,24 @@
-// useNotification.ts
+import {getApp} from '@react-native-firebase/app';
 import {useEffect} from 'react';
 import {PermissionsAndroid, Platform} from 'react-native';
-import messaging from '@react-native-firebase/messaging';
-import firestore from '@react-native-firebase/firestore';
 import {jwtDecode} from 'jwt-decode';
 import {useAuthStore} from '../zustand/AuthStore';
+
+// ✅ Modular Firebase imports
+import {
+  getMessaging,
+  getToken,
+  onTokenRefresh,
+  requestPermission,
+  AuthorizationStatus,
+} from '@react-native-firebase/messaging';
+import {
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  serverTimestamp,
+} from '@react-native-firebase/firestore';
 
 const saveTokenToFirestore = async (token: string) => {
   try {
@@ -23,9 +37,11 @@ const saveTokenToFirestore = async (token: string) => {
     }
 
     console.log('Saving token for userId:', userId);
-    await firestore().collection('fcmTokens').doc(userId).set({
+
+    const db = getFirestore(getApp()); // ✅ FIXED
+    await setDoc(doc(collection(db, 'fcmTokens'), userId), {
       token,
-      lastUpdated: firestore.FieldValue.serverTimestamp(),
+      lastUpdated: serverTimestamp(),
     });
   } catch (error) {
     console.error('Error saving FCM token:', error);
@@ -39,52 +55,54 @@ const requestUserPermission = async () => {
     );
     return granted === PermissionsAndroid.RESULTS.GRANTED;
   } else if (Platform.OS === 'ios') {
-    const authStatus = await messaging().requestPermission();
+    const messaging = getMessaging(getApp()); // ✅ Pass messaging instance
+    const authStatus = await requestPermission(messaging);
     return (
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL
+      authStatus === AuthorizationStatus.AUTHORIZED ||
+      authStatus === AuthorizationStatus.PROVISIONAL
     );
   }
-  return true; // Assume permission granted on other platforms
+  return true;
 };
 
-const getToken = async () => {
-  try {
-    const token = await messaging().getToken();
-    console.log('FCM Token:', token);
-    if (token) {
-      await saveTokenToFirestore(token);
-    }
-  } catch (error) {
-    console.log('Error getting FCM token:', error);
-  }
-};
-
-export const useNotification = () => {
+export const useNotification = (onPermissionDenied?: () => void) => {
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
 
     const setup = async () => {
-      const hasPermission = await requestUserPermission();
-      if (hasPermission) {
-        await getToken();
+      try {
+        const hasPermission = await requestUserPermission();
+        if (hasPermission) {
+          const messaging = getMessaging();
+          const fcmToken = await getToken(messaging);
+          console.log('FCM Token:', fcmToken);
 
-        // Listen for token refresh
-        unsubscribe = messaging().onTokenRefresh(newToken => {
-          saveTokenToFirestore(newToken);
-        });
-      } else {
-        console.log('User denied notification permissions');
+          if (fcmToken) {
+            await saveTokenToFirestore(fcmToken);
+          }
+
+          unsubscribe = onTokenRefresh(messaging, async newToken => {
+            await saveTokenToFirestore(newToken);
+          });
+        } else {
+          // Only call the denied callback if it's provided
+          // This way you can handle the denial in your UI component
+          if (onPermissionDenied) {
+            onPermissionDenied();
+          }
+          console.log('User denied notification permissions');
+        }
+      } catch (error) {
+        console.error('Error setting up notifications:', error);
       }
     };
 
     setup();
 
-    // Cleanup function to unsubscribe from token refresh
     return () => {
       if (unsubscribe) {
         unsubscribe();
       }
     };
-  }, []);
+  }, [onPermissionDenied]);
 };

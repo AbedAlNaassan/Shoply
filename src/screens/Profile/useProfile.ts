@@ -9,6 +9,7 @@ import {useAuthStore} from '../../zustand/AuthStore';
 import {RootStackParamList} from '../../types/types';
 import {useProfileImage} from './useProfileImage';
 import {Alert} from 'react-native';
+import {API_URL} from '../../api/constants';
 
 const profileSchema = z.object({
   firstName: z
@@ -69,12 +70,9 @@ export const useProfile = () => {
     const fetchProfile = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          'https://backend-practice.eurisko.me/api/user/profile',
-          {
-            headers: {Authorization: `Bearer ${accessToken}`},
-          },
-        );
+        const response = await axios.get(`${API_URL}/api/user/profile`, {
+          headers: {Authorization: `Bearer ${accessToken}`},
+        });
         const user = response.data.data.user;
 
         setValue('firstName', user.firstName);
@@ -83,7 +81,7 @@ export const useProfile = () => {
         const imageUrl = user.profileImage?.url
           ? user.profileImage.url.startsWith('http')
             ? user.profileImage.url
-            : `https://backend-practice.eurisko.me${user.profileImage.url}`
+            : `${API_URL}${user.profileImage.url}`
           : null;
 
         setProfileImage(imageUrl);

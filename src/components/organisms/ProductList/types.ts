@@ -19,6 +19,7 @@ export interface Product {
 
 export interface ProductListProps {
   scrollEnabled?: boolean;
+  listHeaderComponent?: React.ReactElement | React.ComponentType | null;
 }
 
 export type SortOrder = 'asc' | 'desc';

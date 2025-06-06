@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, Alert} from 'react-native';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -6,12 +6,15 @@ import {
   Camera,
   useCameraDevice,
   useCameraPermission,
+  CameraDevice,
 } from 'react-native-vision-camera';
 import {RootStackParamList} from '../../types/types';
 
 type CameraRouteProp = RouteProp<RootStackParamList, 'Camera'>;
 const Cameras = () => {
-  const device = useCameraDevice('back');
+  const [currentCamera, setCurrentCamera] = useState<'front' | 'back'>('back');
+  const backDevice = useCameraDevice('back');
+  const frontDevice = useCameraDevice('front');
   const cameraRef = useRef<Camera>(null);
   const {hasPermission, requestPermission} = useCameraPermission();
   const navigation = useNavigation();
@@ -46,8 +49,18 @@ const Cameras = () => {
     }
   };
 
+  const toggleCamera = () => {
+    setCurrentCamera(prev => (prev === 'back' ? 'front' : 'back'));
+  };
+
+  const getCurrentDevice = (): CameraDevice | undefined => {
+    return currentCamera === 'back' ? backDevice : frontDevice;
+  };
+
+  const device = getCurrentDevice();
+
   if (!hasPermission) return <Text>Requesting camera permission...</Text>;
-  if (!device) return <Text>Loading camera...</Text>;
+  if (!device) return <Text>Camera device not available</Text>;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -61,6 +74,11 @@ const Cameras = () => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={takePicture}>
           <Text style={styles.buttonText}>📸 Take Photo</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.switchButton]}
+          onPress={toggleCamera}>
+          <Text style={styles.buttonText}>🔄 Switch Camera</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -77,11 +95,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 40,
     alignSelf: 'center',
+    alignItems: 'center',
   },
   button: {
     backgroundColor: '#ffffffaa',
     padding: 15,
     borderRadius: 10,
+    marginBottom: 10,
+  },
+  switchButton: {
+    backgroundColor: '#3A59D1',
   },
   buttonText: {
     fontSize: 18,

@@ -25,6 +25,7 @@ import ImagePickerSection from './ImagePickerSection';
 import MapSection from './MapSection';
 import {z} from 'zod';
 import axios from 'axios';
+import {API_URL} from '../../../api/constants';
 
 const productSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -75,10 +76,9 @@ const EditProductScreen = () => {
     const fetchProduct = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `https://backend-practice.eurisko.me/api/products/${id}`,
-          {headers: {Authorization: `Bearer ${accessToken}`}},
-        );
+        const response = await axios.get(`${API_URL}/api/products/${id}`, {
+          headers: {Authorization: `Bearer ${accessToken}`},
+        });
 
         const product = response.data.data;
         const loc = product.location ?? {
@@ -184,16 +184,12 @@ const EditProductScreen = () => {
         } as any);
       });
 
-      await axios.put(
-        `https://backend-practice.eurisko.me/api/products/${id}`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${accessToken}`,
-          },
+      await axios.put(`${API_URL}/api/products/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${accessToken}`,
         },
-      );
+      });
 
       Alert.alert('Success', 'Product updated successfully');
       navigation.goBack();

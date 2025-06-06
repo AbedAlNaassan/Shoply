@@ -11,6 +11,7 @@ import RNFS from 'react-native-fs';
 import axios from 'axios';
 import {useAuthStore} from '../../../zustand/AuthStore';
 import {useCartStore} from '../../../zustand/Cart';
+import {API_URL} from '../../../api/constants';
 
 interface ProductImage {
   url: string;
@@ -33,8 +34,8 @@ interface Product {
   };
 }
 
-const API_BASE_URL = 'https://backend-practice.eurisko.me/api';
-const API_BASE_URL_UPLOAD = 'https://backend-practice.eurisko.me';
+const API_BASE_URL = `${API_URL}/api`;
+const API_BASE_URL_UPLOAD = API_URL;
 
 const useProductDetail = () => {
   const route = useRoute();
@@ -42,6 +43,7 @@ const useProductDetail = () => {
   const accessToken = useAuthStore(state => state.accessToken);
   const addToCart = useCartStore(state => state.addToCart);
   const {id} = route.params as {id: string};
+  const [isSaving, setIsSaving] = useState(false);
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -131,6 +133,8 @@ const useProductDetail = () => {
 
   const saveImage = async (url: string) => {
     try {
+      setIsSaving(true); // Start saving process - show spinner
+
       let hasPermission = false;
 
       if (Platform.OS === 'android') {
@@ -175,6 +179,8 @@ const useProductDetail = () => {
     } catch (err) {
       console.error(err);
       Alert.alert('Error', 'Something went wrong');
+    } finally {
+      setIsSaving(false); // End saving process - hide spinner
     }
   };
 
@@ -187,6 +193,7 @@ const useProductDetail = () => {
     handleEmailOwner,
     saveImage,
     navigation,
+    isSaving,
   };
 };
 

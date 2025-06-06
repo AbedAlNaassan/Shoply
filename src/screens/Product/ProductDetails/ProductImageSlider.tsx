@@ -1,6 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, Image} from 'react-native';
 import Swiper from 'react-native-swiper';
+import {API_URL} from '../../../api/constants';
 
 interface ProductImageSliderProps {
   images: Array<{url: string}>;
@@ -11,7 +12,7 @@ const ProductImageSlider: React.FC<ProductImageSliderProps> = ({
   images,
   onSaveImage,
 }) => {
-  const API_BASE_URL_UPLOAD = 'https://backend-practice.eurisko.me';
+  const API_BASE_URL_UPLOAD = API_URL;
 
   return (
     <Swiper

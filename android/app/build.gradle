@@ -134,7 +134,7 @@ dependencies {
     implementation("com.facebook.react:react-android")
 
  implementation "androidx.core:core-splashscreen:1.0.0-beta01" 
- implementation 'com.google.firebase:firebase-crashlytics'
+ implementation 'com.google.firebase:firebase-crashlytics:18.6.1'
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {

@@ -1,42 +1,61 @@
-import messaging from '@react-native-firebase/messaging';
+import {
+  getMessaging,
+  onMessage,
+  onNotificationOpenedApp,
+  getInitialNotification,
+} from '@react-native-firebase/messaging';
 import {useEffect} from 'react';
-import {Alert} from 'react-native';
+import notifee, {AndroidImportance} from '@notifee/react-native';
 
 export const useMessagingListener = () => {
   useEffect(() => {
+    // Create channel once (for Android)
+    const createChannel = async () => {
+      await notifee.requestPermission();
+      await notifee.createChannel({
+        id: 'default',
+        name: 'Default Channel',
+        importance: AndroidImportance.HIGH,
+      });
+    };
+    createChannel();
+
+    // Get the messaging instance
+    const messaging = getMessaging();
+
     // Foreground messages
-    const unsubscribeOnMessage = messaging().onMessage(async remoteMessage => {
+    const unsubscribeOnMessage = onMessage(messaging, async remoteMessage => {
       console.log('FCM Message Data:', remoteMessage.data);
 
-      setTimeout(() => {
-        Alert.alert(
-          remoteMessage.notification?.title ?? 'Notification',
-          remoteMessage.notification?.body ?? 'You have a new message',
-        );
-      }, 2000); // delay by 5 seconds
+      // Replace Alert with Notifee
+      await notifee.displayNotification({
+        title: remoteMessage.notification?.title ?? 'Notification',
+        body: remoteMessage.notification?.body ?? 'You have a new message',
+        android: {
+          channelId: 'default',
+          smallIcon: 'ic_launcher', // Make sure this icon exists
+        },
+      });
     });
 
-    // When app is opened from a background state (notification tap)
-    const unsubscribeNotificationOpened = messaging().onNotificationOpenedApp(
+    const unsubscribeNotificationOpened = onNotificationOpenedApp(
+      messaging,
       remoteMessage => {
         console.log(
-          'Notification caused app to open from background state:',
+          'Notification caused app to open from background:',
           remoteMessage,
         );
       },
     );
 
-    // When app is opened from quit state (cold start)
-    messaging()
-      .getInitialNotification()
-      .then(remoteMessage => {
-        if (remoteMessage) {
-          console.log(
-            'Notification caused app to open from quit state:',
-            remoteMessage,
-          );
-        }
-      });
+    getInitialNotification(messaging).then(remoteMessage => {
+      if (remoteMessage) {
+        console.log(
+          'Notification caused app to open from quit state:',
+          remoteMessage,
+        );
+      }
+    });
 
     return () => {
       unsubscribeOnMessage();

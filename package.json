@@ -15,6 +15,7 @@
   "dependencies": {
     "@google-cloud/storage": "^7.16.0",
     "@hookform/resolvers": "^5.0.1",
+    "@notifee/react-native": "^9.1.8",
     "@react-native-community/cli": "^18.0.0",
     "@react-native-community/cli-platform-android": "^18.0.0",
     "@react-native-community/cli-platform-ios": "^18.0.0",
@@ -59,6 +60,7 @@
     "@react-native/metro-config": "0.79.2",
     "@react-native/typescript-config": "0.79.2",
     "@testing-library/react-native": "^13.2.0",
+    "@types/jest": "^29.5.14",
     "@types/react": "^19.0.0",
     "@types/react-test-renderer": "^19.0.0",
     "cross-env": "^7.0.3",

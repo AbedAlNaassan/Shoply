@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const API_URL = 'https://backend-practice.eurisko.me/api/products'; // Replace with actual URL
+const API_URL = 'https://backend-practice.eurisko.me/api/products';
 
 export const fetchProducts = async (
   page = 1,

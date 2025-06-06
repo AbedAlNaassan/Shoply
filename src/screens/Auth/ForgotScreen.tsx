@@ -14,6 +14,7 @@ import BlueButtons from '../../components/atoms/BlueButtons';
 import {RootStackParamList} from '../../types/types';
 import {useTheme} from '../../context/ThemeContext';
 import {zodResolver} from '@hookform/resolvers/zod';
+import {API_URL} from '../../api/constants';
 import axios from 'axios';
 import {z} from 'zod';
 
@@ -40,12 +41,9 @@ const LoginForm = () => {
 
   const onSubmit = async (data: ForgotFormData) => {
     try {
-      const response = await axios.post(
-        'https://backend-practice.eurisko.me/api/auth/forgot-password',
-        {
-          email: data.email,
-        },
-      );
+      const response = await axios.post(`${API_URL}/api/auth/forgot-password`, {
+        email: data.email,
+      });
 
       if (response.data.success) {
         Alert.alert('Success', response.data.data.message);
