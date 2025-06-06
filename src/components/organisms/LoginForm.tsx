@@ -109,7 +109,7 @@ const LoginForm = () => {
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
             style={styles.input}
-            placeholder="eurisko@gmail.com"
+            placeholder="Enter your email"
             placeholderTextColor="gray"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -128,7 +128,7 @@ const LoginForm = () => {
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
             style={styles.input}
-            placeholder="academy2025"
+            placeholder="Enter your password"
             placeholderTextColor="gray"
             secureTextEntry={true}
             onBlur={onBlur}
