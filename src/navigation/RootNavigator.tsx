@@ -106,9 +106,13 @@ export default function RootNavigator({navigationRef}: RootNavigatorProps) {
   useEffect(() => {
     const handleDeepLink = (url?: string) => {
       if (!url) return;
+
       try {
-        const parsed = new URL(url);
-        const [, screen, id] = parsed.pathname.split('/');
+        // Strip the scheme (e.g., myapp://product/123)
+        const route = url.replace(/.*?:\/\//g, ''); // → product/123
+        const parts = route.split('/'); // ['product', '123']
+        const screen = parts[0];
+        const id = parts[1];
 
         if (screen === 'product' && id) {
           navigationRef.current?.dispatch(
@@ -122,7 +126,7 @@ export default function RootNavigator({navigationRef}: RootNavigatorProps) {
           );
         }
       } catch (err) {
-        console.warn('Invalid URL structure:', url);
+        console.warn('Invalid deep link URL:', url);
       }
     };
 

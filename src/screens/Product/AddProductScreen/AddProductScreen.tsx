@@ -11,8 +11,10 @@ import {ImagePickerSection} from './ImagePickerSection';
 import {LocationPicker} from './LocationPicker';
 import {ProductFormFields} from './ProductFormFields';
 import {submitProduct} from './productApi';
-
 import {MapPressEvent} from 'react-native-maps';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../../types/types';
 
 const initialMarker: MarkerType = {
   name: 'Beirut',
@@ -28,6 +30,8 @@ const AddProduct = () => {
   const styles = theme === 'dark' ? darkStyles : lightStyles;
   const {control, handleSubmit, errors, setValue} =
     useProductForm(initialMarker);
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamList, 'AddProduct'>>();
 
   const handleMapPress = (e: MapPressEvent) => {
     const {latitude, longitude} = e.nativeEvent.coordinate;
@@ -40,9 +44,18 @@ const AddProduct = () => {
     setValue('location', newMarker);
   };
 
+  const handleSearchSelect = (selectedLocation: MarkerType) => {
+    const newMarker = {
+      ...selectedLocation,
+      name: selectedLocation.name || 'Searched Location',
+    };
+    setMarker(newMarker);
+    setValue('location', newMarker);
+  };
+
   const onSubmit = async (data: ProductForm) => {
     setLoading(true);
-    const result = await submitProduct(data, images);
+    const result = await submitProduct(data, images, navigation);
     setLoading(false);
 
     if (result.success) {
@@ -78,6 +91,7 @@ const AddProduct = () => {
           <LocationPicker
             marker={marker}
             onMapPress={handleMapPress}
+            onSearchSelect={handleSearchSelect} // Add this prop
             styles={styles}
           />
 

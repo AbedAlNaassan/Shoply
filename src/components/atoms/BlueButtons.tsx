@@ -9,10 +9,7 @@ type BlueButtonProps = {
 const BlueButtons = ({name, onPress}: BlueButtonProps) => {
   return (
     <Pressable
-      style={({pressed}) => [
-        styles.button,
-        {opacity: pressed ? 0.5 : 1}, // this line adds the feedback
-      ]}
+      style={({pressed}) => [styles.button, {opacity: pressed ? 0.5 : 1}]}
       onPress={onPress}>
       <Text style={styles.buttonText}>{name}</Text>
     </Pressable>

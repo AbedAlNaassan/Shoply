@@ -19,7 +19,7 @@ const MapSection: React.FC<Props> = ({marker, onMapPress, styles}) => {
     <View style={styles.mapContainer}>
       <MapView
         style={styles.map}
-        initialRegion={{
+        region={{
           latitude: marker.latitude,
           longitude: marker.longitude,
           latitudeDelta: 0.02,

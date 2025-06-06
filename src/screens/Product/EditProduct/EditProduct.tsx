@@ -79,7 +79,7 @@ const EditProductScreen = () => {
         const response = await axios.get(`${API_URL}/api/products/${id}`, {
           headers: {Authorization: `Bearer ${accessToken}`},
         });
-
+        console.log(response.data.data);
         const product = response.data.data;
         const loc = product.location ?? {
           name: 'Beirut',

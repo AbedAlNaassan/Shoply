@@ -4,7 +4,6 @@ import {PermissionsAndroid, Platform} from 'react-native';
 import {jwtDecode} from 'jwt-decode';
 import {useAuthStore} from '../zustand/AuthStore';
 
-// ✅ Modular Firebase imports
 import {
   getMessaging,
   getToken,
@@ -38,7 +37,7 @@ const saveTokenToFirestore = async (token: string) => {
 
     console.log('Saving token for userId:', userId);
 
-    const db = getFirestore(getApp()); // ✅ FIXED
+    const db = getFirestore(getApp());
     await setDoc(doc(collection(db, 'fcmTokens'), userId), {
       token,
       lastUpdated: serverTimestamp(),
@@ -85,8 +84,6 @@ export const useNotification = (onPermissionDenied?: () => void) => {
             await saveTokenToFirestore(newToken);
           });
         } else {
-          // Only call the denied callback if it's provided
-          // This way you can handle the denial in your UI component
           if (onPermissionDenied) {
             onPermissionDenied();
           }

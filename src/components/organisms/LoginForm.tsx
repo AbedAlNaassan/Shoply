@@ -25,12 +25,14 @@ const loginSchema = z.object({
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Verification'>;
 type LoginFormData = z.infer<typeof loginSchema>;
+
 const height = Dimensions.get('screen').height;
 
 const LoginForm = () => {
   const navigation = useNavigation<NavigationProp>();
   const [loading, setLoading] = useState(false);
   const store = useAuthStore.getState();
+
   const {
     control,
     handleSubmit,
@@ -51,7 +53,6 @@ const LoginForm = () => {
         });
 
         console.log('Login successful:', response);
-
         store.setUser({email: data.email});
         store.setTokens({
           accessToken: response.data.accessToken,
@@ -95,7 +96,8 @@ const LoginForm = () => {
         setLoading(false);
       }
     },
-    [setError, handleSubmit, store],
+    // Removed onSubmit from dependencies to avoid circular reference
+    [handleSubmit, setError, store],
   );
 
   return (
@@ -119,6 +121,7 @@ const LoginForm = () => {
         rules={{required: 'Email is required'}}
       />
       {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
+
       <Controller
         control={control}
         name="password"
@@ -138,6 +141,7 @@ const LoginForm = () => {
       {errors.password && (
         <Text style={styles.error}>{errors.password.message}</Text>
       )}
+
       <BlueButtons name="Login" onPress={handleSubmit(onSubmit)} />
       <BlueButtons
         name="Forgot Password"

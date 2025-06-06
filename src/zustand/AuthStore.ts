@@ -20,6 +20,7 @@ type AuthStore = {
   setIsVerified: (value: boolean) => void;
   loadStoredTokens: () => Promise<void>;
   logout: () => Promise<void>;
+  testRun: boolean;
 };
 
 export const useAuthStore = create<AuthStore>(set => ({
@@ -29,6 +30,7 @@ export const useAuthStore = create<AuthStore>(set => ({
   isNewUser: false,
   isVerified: false,
   email: '',
+  testRun: false,
 
   setEmail: email => set({email}),
 

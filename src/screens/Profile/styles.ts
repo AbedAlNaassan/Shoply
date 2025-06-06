@@ -4,7 +4,6 @@ import {Dimensions} from 'react-native';
 const {height} = Dimensions.get('window');
 const pixel = PixelRatio.getFontScale();
 
-// Base styles that don't depend on theme
 const baseStyles = StyleSheet.create({
   header: {
     width: '100%',
@@ -51,7 +50,6 @@ const baseStyles = StyleSheet.create({
   },
 });
 
-// Themed styles
 const themedStyles = (theme: 'light' | 'dark') =>
   StyleSheet.create({
     ...baseStyles,

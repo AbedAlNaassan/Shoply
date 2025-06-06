@@ -27,7 +27,6 @@ export const useMessagingListener = () => {
     const unsubscribeOnMessage = onMessage(messaging, async remoteMessage => {
       console.log('FCM Message Data:', remoteMessage.data);
 
-      // Replace Alert with Notifee
       await notifee.displayNotification({
         title: remoteMessage.notification?.title ?? 'Notification',
         body: remoteMessage.notification?.body ?? 'You have a new message',

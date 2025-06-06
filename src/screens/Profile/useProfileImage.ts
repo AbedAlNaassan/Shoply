@@ -1,4 +1,3 @@
-// hooks/useProfileImage.ts
 import {Alert, Platform, PermissionsAndroid} from 'react-native';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {launchImageLibrary} from 'react-native-image-picker';

@@ -7,12 +7,10 @@ import {API_URL} from '../../../api/constants';
 import {RootStackParamList} from '../../../types/types';
 import {StackNavigationProp} from '@react-navigation/stack';
 
-type NavigationProp = StackNavigationProp<RootStackParamList, 'ProductList'>;
-
 export const submitProduct = async (
   data: ProductForm,
   images: AssetType[],
-  navigation: NavigationProp,
+  navigation: StackNavigationProp<RootStackParamList, 'AddProduct'>,
 ) => {
   const accessToken = useAuthStore.getState().accessToken;
   const formData = new FormData();

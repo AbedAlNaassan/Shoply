@@ -94,10 +94,8 @@ const RegisterForm: React.FC = () => {
     );
   }, []);
 
-  // Simplified submission handler without useCallback
   const onSubmit = useCallback(
     async (data: RegisterType) => {
-      console.log('✅ onSubmit started with:', data);
       setLoading(true);
 
       const formData = new FormData();
@@ -129,12 +127,8 @@ const RegisterForm: React.FC = () => {
         ]);
       } catch (error: any) {
         setLoading(false);
-        console.log(
-          '❌ Signup failed:',
-          error?.response?.data?.message || error.message,
-        );
+        console.log(error?.response?.data?.message || error.message);
 
-        // ✅ Use setError for field-specific errors
         if (error?.response?.data?.field === 'email') {
           setError('email', {
             type: 'manual',
