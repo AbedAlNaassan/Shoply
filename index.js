@@ -1,3 +1,4 @@
+//this is metadata for some tools and formatters (like Prettier or Metro bundler).
 /**
  * @format
  */
@@ -7,7 +8,7 @@ import {name as appName} from './app.json';
 import {getMessaging} from '@react-native-firebase/messaging';
 import {getCrashlytics, recordError} from '@react-native-firebase/crashlytics';
 
-// Register background message handler (modular API)
+//  runs when a push notification is received while the app is in the background or killed
 getMessaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
 });
@@ -25,5 +26,5 @@ ErrorUtils.setGlobalHandler((error, isFatal) => {
   // Call the default handler so app shows red screen or crash normally
   defaultHandler(error, isFatal);
 });
-
+//This tells React Native to start the app using the App component.
 AppRegistry.registerComponent(appName, () => App);

@@ -21,7 +21,6 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
 
   const handleSearch = async () => {
     try {
-      // Replace with your actual geocoding API call
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
           searchQuery,
@@ -37,7 +36,6 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
 
       setSearchResults(results);
 
-      // If there are results, you might want to move the map to the first one
       if (results.length > 0) {
         onSearchSelect(results[0]);
       }

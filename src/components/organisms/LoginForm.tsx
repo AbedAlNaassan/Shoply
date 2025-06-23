@@ -96,7 +96,6 @@ const LoginForm = () => {
         setLoading(false);
       }
     },
-    // Removed onSubmit from dependencies to avoid circular reference
     [handleSubmit, setError, store],
   );
 

@@ -37,7 +37,7 @@ const ProductDetailScreen = () => {
     handleEmailOwner,
     navigation,
     saveImage,
-    isSaving, // Get the isSaving state from the hook
+    isSaving,
   } = useProductDetail();
 
   if (loading) {

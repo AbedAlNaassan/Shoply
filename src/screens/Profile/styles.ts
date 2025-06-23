@@ -55,7 +55,7 @@ const themedStyles = (theme: 'light' | 'dark') =>
     ...baseStyles,
     container: {
       flex: 1,
-      width: '100%', // ✅ '100%' is acceptable in StyleSheet.create context
+      width: '100%',
       backgroundColor: theme === 'dark' ? '#12141C' : '#fff',
     },
   });

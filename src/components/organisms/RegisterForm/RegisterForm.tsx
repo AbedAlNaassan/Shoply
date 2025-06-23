@@ -143,7 +143,7 @@ const RegisterForm: React.FC = () => {
             {text: 'Cancel', style: 'cancel'},
             {
               text: 'Retry',
-              onPress: () => handleSubmit(onSubmit)(), // ✅ Actually call it
+              onPress: () => handleSubmit(onSubmit)(),
             },
           ],
         );

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import {useEffect, useRef} from 'react';
 import {
   NavigationContainer,
   NavigationContainerRef,
@@ -12,11 +12,13 @@ import RootNavigator from './src/navigation/RootNavigator';
 import BootSplash from 'react-native-bootsplash';
 import RNBootSplash from 'react-native-bootsplash';
 const AppContent = () => {
+  //get isDark from useTheme Context
   const {isDarkMode} = useTheme();
 
-  // Fix: Add <ParamListBase> to NavigationContainerRef generic
+  //Create a reference to the navigation container to programmatically control navigation
   const navigationRef = useRef<NavigationContainerRef<ParamListBase>>(null);
 
+  //If a user opens myapp://product/42, they go to ProductDetails screen with id = 42.
   const linking = {
     prefixes: ['myapp://'],
     config: {
@@ -32,10 +34,9 @@ const AppContent = () => {
   };
 
   useEffect(() => {
-    const init = async () => {
-      // …do multiple sync or async tasks
-    };
+    const init = async () => {};
 
+    //After it's done, hide the splash screen with a fade effect.
     init().finally(async () => {
       await BootSplash.hide({fade: true});
       console.log('BootSplash has been hidden successfully');
@@ -45,7 +46,6 @@ const AppContent = () => {
   return (
     <>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      {/* Pass navigationRef to NavigationContainer and RootNavigator */}
       <NavigationContainer
         onReady={() => RNBootSplash.hide()}
         ref={navigationRef}

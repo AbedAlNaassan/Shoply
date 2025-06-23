@@ -88,7 +88,7 @@ export const useProfile = () => {
       } catch (err: any) {
         console.error('Failed to fetch profile:', err);
         if (!err.response || err.response.status === 521) {
-          showRetryAlert(fetchProfile); // retry fetchProfile on error
+          showRetryAlert(fetchProfile);
         }
       } finally {
         setLoading(false);

@@ -54,7 +54,7 @@ const requestUserPermission = async () => {
     );
     return granted === PermissionsAndroid.RESULTS.GRANTED;
   } else if (Platform.OS === 'ios') {
-    const messaging = getMessaging(getApp()); // ✅ Pass messaging instance
+    const messaging = getMessaging(getApp());
     const authStatus = await requestPermission(messaging);
     return (
       authStatus === AuthorizationStatus.AUTHORIZED ||

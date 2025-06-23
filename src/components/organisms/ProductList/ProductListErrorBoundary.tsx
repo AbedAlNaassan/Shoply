@@ -23,7 +23,6 @@ class ProductListErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('ProductList Error Boundary caught:', error, errorInfo);
-    // You could also log this to an error reporting service
   }
 
   render() {

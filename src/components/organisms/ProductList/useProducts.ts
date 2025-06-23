@@ -64,7 +64,7 @@ export const useProducts = () => {
             },
           ],
         );
-        throw err; // Re-throw for error boundary
+        throw err;
       } finally {
         loadingRef.current = false;
         setInitialLoading(false);

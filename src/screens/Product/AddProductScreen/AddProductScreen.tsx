@@ -60,7 +60,6 @@ const AddProduct = () => {
 
     if (result.success) {
       Alert.alert('Success', 'Product added successfully');
-      // Optional: Reset form
       setImages([]);
       setMarker(initialMarker);
     } else {
@@ -91,7 +90,7 @@ const AddProduct = () => {
           <LocationPicker
             marker={marker}
             onMapPress={handleMapPress}
-            onSearchSelect={handleSearchSelect} // Add this prop
+            onSearchSelect={handleSearchSelect}
             styles={styles}
           />
 
